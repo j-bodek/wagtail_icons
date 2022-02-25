@@ -1,0 +1,85 @@
+
+
+#fileform label{
+    display:none;
+}
+
+.uploaded_icons_list{
+    padding: 0;
+    margin:20px 0px 0px 0px;
+    display:block;
+    width: 100%;
+    max-width: 1000px;
+}
+
+.uploaded_icon{
+    width: 100%;
+    height: 200px;
+    list-style: none;
+    display:flex;
+    margin-bottom:15px;
+    border: 2px solid #000;
+}
+
+.icon_box{
+    max-width:30%;
+    height:calc(100%-10px);
+    padding:20px;
+    border-right: 2px solid #000;
+}
+
+.icon_box>img{
+    height:100%;
+    width:100%;
+}
+
+.content_box{
+    width:65%;
+    height:100%;
+    margin-left:5%;
+    position:relative;
+}
+
+.content_box>.message{
+    margin-top: 10px;
+    color: #007d7e;
+}
+
+.content_box>form{
+    position:absolute;
+    bottom:0;
+    width:100%;
+}
+
+.input_box{
+    display: flex;
+    justify-content: center;
+}
+
+.content_box>form>.delete_btn,
+.content_box>form>.update_btn{
+    margin-top:20px;
+    width:100px;
+    height:40px;
+    border-radius: 10px;
+    border: 0px;
+    transition: all 0.2s;
+}
+
+.content_box>form>.delete_btn{
+    background-color: #fff;
+    color: #b4191f;
+    border: 1px solid #b4191f;
+}
+.content_box>form>.delete_btn:hover{
+    color:#fff;
+    background-color: #b4191f;
+}
+
+.content_box>form>.update_btn{
+    background-color:#007d7e;
+    color:#fff;
+}
+.content_box>form>.update_btn:hover{
+    background-color: #006465;
+}
