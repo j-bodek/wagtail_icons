@@ -29,28 +29,30 @@ class add(TemplateView):
     template_name = 'icons/icons_page/add.html'
 
     def post(self, request):
-        if not request.FILES:
-            return HttpResponseBadRequest("Please upload a file")
-        
-        # get specified title or file title if specified doesn't exist
-        file_title = request.POST.get('title') if request.POST.get('title') else request.FILES['file'].name.rsplit(".", 1)[0]
-        form = IconForm({
-            'title': file_title,
-        },{
-            'file': request.FILES['file'],
-        })
-        print(file_title)
-        print(request.FILES['file'])
 
-        if form.is_valid():
-            # Save it
-            icon = form.save(commit=False)
-            icon.uploaded_by_user = self.request.user
-            icon.file_size = icon.file.size
-            icon.file.seek(0)
-            # print('success')
-            icon.save()
-            return HttpResponse("Icon successfully uploaded")
+        print(request.POST)
+        print(request.FILES)
+        # if not request.FILES:
+        #     return HttpResponseBadRequest("Please upload a file")
+        
+        # # get specified title or file title if specified doesn't exist
+        # file_title = request.POST.get('title') if request.POST.get('title') else request.FILES['file'].name.rsplit(".", 1)[0]
+        # form = IconForm({
+        #     'title': file_title,
+        # },{
+        #     'file': request.FILES['file'],
+        # })
+        # print(file_title)
+        # print(request.FILES['file'])
+
+        # if form.is_valid():
+        #     # Save it
+        #     icon = form.save(commit=False)
+        #     icon.uploaded_by_user = self.request.user
+        #     icon.file_size = icon.file.size
+        #     icon.file.seek(0)
+        #     icon.save()
+        #     return HttpResponse("Icon successfully uploaded")
         
 
         return HttpResponse("Error")
