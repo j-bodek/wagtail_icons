@@ -2,7 +2,12 @@
 {% load i18n %}
 {% load l10n %}
 {% load static wagtailadmin_tags wagtailimages_tags %}
+{% block extra_css %}
 
+    <link rel="stylesheet" href="{% versioned_static 'wagtailimages/css/add-multiple.css' %}" type="text/css" />
+    <link rel="stylesheet" href="{% static 'icons/style/add.css' %}" type="text/css" />
+    
+{% endblock %}
 
 {% block content %}
     {% include "wagtailadmin/shared/header.html" with title="ADD ICONS" icon="tick-inverse" %}
@@ -20,10 +25,20 @@
             </form>
 
 
+
+            
+            <ul class="uploaded_icons_list" id="uploaded_icons_list">
+
+            </ul>
+            
     </div>
+
+
+
 
 {% endblock %}
 
 {% block extra_js %}
     <script src="{% static 'icons/js/add_icon.js' %}"></script>
+
 {% endblock %}
