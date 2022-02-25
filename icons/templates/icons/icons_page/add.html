@@ -1,0 +1,45 @@
+{% extends "wagtailadmin/base.html" %}
+{% load i18n %}
+{% load l10n %}
+{% load static wagtailadmin_tags wagtailimages_tags %}
+{% block extra_css %}
+
+    <!-- <link rel="stylesheet" href="{% versioned_static 'wagtailimages/css/add-multiple.css' %}" type="text/css" />
+
+    <style>
+        label{
+            display:none
+        }
+    </style> -->
+{% endblock %}
+
+{% block content %}
+    {% include "wagtailadmin/shared/header.html" with title="ADD ICONS" icon="tick-inverse" %}
+
+    <div class="nice-padding">
+        <div class="drop-zone">
+            <p>{% trans "Drag and drop icons into this area to upload immediately." %}</p>
+            <p>{{ help_text }}</p>
+
+            <iframe style="display:none" name="hiddenFrame" class="hide"></iframe>
+            <form id="fileform" action="{% url 'wagtailicons:add' %}" method="POST" enctype="multipart/form-data" target="hiddenFrame">
+                <div class="replace-file-input">
+                    <!-- <button class="button bicolor button--icon">{% icon name="plus" wrapped=1 %}{% trans "Or choose from your computer" %}</button> -->
+                    <!-- <input id="fileupload" type="file" name="files[]" data-url="{% url 'wagtailicons:add' %}" multiple> -->
+                    {% csrf_token %}
+                    {{ form.errors }}
+                    {{ form.non_field_errors }}
+                    {{ form.as_table }}
+                    <input type="submit" value="Submit" id="Save">
+                </div>
+
+            </form>
+        </div>
+
+    </div>
+
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'icons/js/add_icon.js' %}"></script>
+{% endblock %}

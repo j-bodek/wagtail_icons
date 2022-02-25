@@ -1,0 +1,20 @@
+<!-- @usefull main icon page -->
+{% extends "wagtailadmin/base.html" %}
+{% load wagtailadmin_tags %}
+{% load wagtailimages_tags %}
+{% load i18n %}
+
+
+{% block content %}
+
+    {% url "wagtailicons:add" as add_icon %}
+    {% include "wagtailadmin/shared/header.html" with title="Icons" action_url=add_icon action_text='Add icon' icon="tick-inverse" %}
+
+    
+    <div class="nice-padding">
+        <div id="image-results">
+            {% include "icons/icons_page/icons_results.html" %}
+        </div>
+    </div>
+
+{% endblock %}
