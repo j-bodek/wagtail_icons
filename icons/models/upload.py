@@ -8,7 +8,7 @@ from django.utils.translation import gettext_lazy as _
 
 
 class Icon(models.Model): 
-    title = models.CharField(max_length=255, verbose_name=_('title'))
+    title = models.CharField(max_length=255, verbose_name=_('title'), blank=True)
     file = models.FileField(
         verbose_name=_('file'), upload_to=get_upload_to
     )

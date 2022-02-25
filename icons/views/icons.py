@@ -32,10 +32,15 @@ class add(TemplateView):
         if not request.FILES:
             return HttpResponseBadRequest("Please upload a file")
         
-
-        form = IconForm(request.POST, request.FILES)
-        print(request.POST)
-        print(request.FILES)
+        # get specified title or file title if specified doesn't exist
+        file_title = request.POST.get('title') if request.POST.get('title') else request.FILES['file'].name.rsplit(".", 1)[0]
+        form = IconForm({
+            'title': file_title,
+        },{
+            'file': request.FILES['file'],
+        })
+        print(file_title)
+        print(request.FILES['file'])
 
         if form.is_valid():
             # Save it
@@ -43,7 +48,7 @@ class add(TemplateView):
             icon.uploaded_by_user = self.request.user
             icon.file_size = icon.file.size
             icon.file.seek(0)
-
+            # print('success')
             icon.save()
             return HttpResponse("Icon successfully uploaded")
         
