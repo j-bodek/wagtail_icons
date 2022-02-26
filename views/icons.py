@@ -19,11 +19,19 @@ from django.http import HttpResponseBadRequest, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404
 
 
-def index(request):
+class index(TemplateView):
+    template_name = 'icons/icons_page/index.html'
 
-    return render(request, 'icons/icons_page/index.html')
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
 
+        icons = Icon.objects.all()
 
+        context.update({
+            'icons': icons,
+        })
+
+        return context
 
 
 class add(TemplateView):
