@@ -30,7 +30,6 @@ class add(TemplateView):
     template_name = 'icons/icons_page/add.html'
 
     def post(self, request):
-        print(request.POST)
         if request.POST.get('action') == 'upload':
             if not request.FILES:
                 return HttpResponseBadRequest("Please upload a file")
@@ -42,8 +41,6 @@ class add(TemplateView):
             },{
                 'file': request.FILES['file'],
             })
-            print(file_title)
-            print(request.FILES['file'])
 
             if form.is_valid():
                 # Save it
@@ -57,12 +54,19 @@ class add(TemplateView):
 
             return JsonResponse({"message":"Error"})
         elif request.POST.get('action') == 'update':
+            if Icon.objects.filter(id=request.POST.get('icon_id')):
+                update_icon = Icon.objects.filter(id=request.POST.get('icon_id'))
+                update_icon.update(title=request.POST.get('title'))
+                return JsonResponse({"message":"Icon Deleted"})
+
             return JsonResponse({"message":"Error"})
+
         elif request.POST.get('action') == 'delete':
             if Icon.objects.filter(id=request.POST.get('icon_id')):
-                # delete_icon = Icon.objects.get(id=request.POST.get('icon_id'))
                 delete_icon = get_object_or_404(Icon, id=request.POST.get('icon_id'))
                 delete_icon.delete()
+                return JsonResponse({"message":"Icon Deleted"})
+
             return JsonResponse({"message":"Error"})
         else:
             return JsonResponse({"message":"Invalid action"})

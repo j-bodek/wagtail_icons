@@ -60,6 +60,7 @@ def auto_delete_file_on_delete(sender, instance, **kwargs):
 
 @receiver(models.signals.pre_save, sender=Icon)
 def auto_delete_file_on_change(sender, instance, **kwargs):
+    
     """
     Deletes old file from filesystem
     when corresponding `Icon` object is updated

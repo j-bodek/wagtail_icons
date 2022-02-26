@@ -3,16 +3,15 @@ $(function() {
     let uploaded_forms_listener = function(){
         document.querySelectorAll('.updateform').forEach((form)=>{
             form.addEventListener('submit', function(e){
-
                 e.preventDefault();
                 $.ajax({
                     type: 'POST',
                     url: '',
                     data: {
-                        'title': $('#update_title').val(),
-                        'action':form.submitted,
-                        'icon_id':form.dataset.icon_id,
-                        'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+                        'title': e.target.querySelector(".update_title").value,
+                        'action':e.target.submitted,
+                        'icon_id':e.target.dataset.icon_id,
+                        'csrfmiddlewaretoken': e.target.querySelector(".csrftoken").value,
                     },
                 });
             })
@@ -77,10 +76,10 @@ $(function() {
                 <div class="content_box">
                     <p class="message">Upload Successful. You can now update icon with new title or delete icon completely.</p>
                     <form class="updateform" method="POST" data-icon_id="${response.icon_id}">
-                        <input type="hidden" name="csrfmiddlewaretoken" value="${getCookie('csrftoken')}">
+                        <input type="hidden" name="csrfmiddlewaretoken" class="csrftoken" value="${getCookie('csrftoken')}">
                         <div class="input_box">
                             <label for="update_title">Title</label>
-                            <input  id="update_title" type="text" value="${title ? title : file.name.replace(/\.[^/.]+$/, "")}">
+                            <input class="update_title"  id="update_title" type="text" value="${title ? title : file.name.replace(/\.[^/.]+$/, "")}">
                         </div>
                         <button class="update_btn" type="submit" onclick="this.form.submitted=this.value;" value="update">update</button>
                         <button class="delete_btn" type="submit" onclick="this.form.submitted=this.value;" value="delete"> delete </button>
