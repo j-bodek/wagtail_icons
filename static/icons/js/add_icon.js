@@ -14,6 +14,9 @@ $(function() {
                         'csrfmiddlewaretoken': e.target.querySelector(".csrftoken").value,
                     },
                 });
+
+                // remove uploaded_icon from list
+                document.querySelector("#uploaded_icons_list").removeChild(e.target.closest('.uploaded_icon'));
             })
         });
     };
