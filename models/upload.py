@@ -1,9 +1,10 @@
-import os.path
+import os
 from django.db import models
 from wagtail.core.utils import string_to_ascii
 from wagtail.images.models import get_upload_to
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
+from django.dispatch import receiver
 
 
 
@@ -45,4 +46,24 @@ class Icon(models.Model):
         return self.title
 
 
+# These two auto-delete files from filesystem
 
+@receiver(models.signals.post_delete, sender=Icon)
+def auto_delete_file_on_delete(sender, instance, **kwargs):
+    """
+    Deletes file from filesystem
+    when corresponding `Icon` object is deleted.
+    """
+    if instance.file:
+        if os.path.isfile(instance.file.path):
+            os.remove(instance.file.path)
+
+@receiver(models.signals.pre_save, sender=Icon)
+def auto_delete_file_on_change(sender, instance, **kwargs):
+    """
+    Deletes old file from filesystem
+    when corresponding `Icon` object is updated
+    with new file.
+    """
+    if not instance.pk:
+        return False
