@@ -4,7 +4,7 @@ from django.contrib.staticfiles.storage import StaticFilesStorage
 from django.contrib.staticfiles.utils import get_files
 from icons.models.upload import Icon
 
-ALLOWED_EXTENSIONS = ['svg', 'png']
+
 
 class IconsField(models.CharField):
     ICONS = Icon.objects.all().values_list('file', 'title')

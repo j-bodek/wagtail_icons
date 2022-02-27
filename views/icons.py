@@ -2,7 +2,6 @@ from django.shortcuts import render
 
 from wagtail.admin.views.generic.multiple_upload import AddView as BaseAddView
 from wagtail.images import get_image_model
-from icons.fields import ALLOWED_EXTENSIONS
 from wagtail.images.forms import get_image_form, get_image_multi_form
 from wagtail.images.models import UploadedImage
 from wagtail.images.permissions import permission_policy
