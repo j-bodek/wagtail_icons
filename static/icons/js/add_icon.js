@@ -72,29 +72,44 @@ $(function() {
         
                 let li = document.createElement("li");
                 li.className = "uploaded_icon"
-                let li_html_content = `
-                <div class="icon_box">
-                    <img src="${URL.createObjectURL(file)}" class="icon">
-                </div>
-                <div class="content_box">
-                    <p class="message">Upload Successful. You can now update icon with new title or delete icon completely.</p>
-                    <form class="updateform" method="POST" data-icon_id="${response.icon_id}">
-                        <input type="hidden" name="csrfmiddlewaretoken" class="csrftoken" value="${getCookie('csrftoken')}">
-                        <div class="input_box">
-                            <label for="update_title">Title</label>
-                            <input class="update_title"  id="update_title" type="text" value="${title ? title : file.name.replace(/\.[^/.]+$/, "")}">
+                let li_html_content = ``;
+                if (! response.code){
+                    li_html_content = `
+                        <div class="icon_box">
+                            <img src="${URL.createObjectURL(file)}" class="icon">
                         </div>
-                        <button class="update_btn" type="submit" onclick="this.form.submitted=this.value;" value="update">update</button>
-                        <button class="delete_btn" type="submit" onclick="this.form.submitted=this.value;" value="delete"> delete </button>
-                    </form>
-                </div>
-                `
+                        <div class="content_box">
+                            <p class="message">Upload Successful. You can now update icon with new title or delete icon completely.</p>
+                            <form class="updateform" method="POST" data-icon_id="${response.icon_id}">
+                                <input type="hidden" name="csrfmiddlewaretoken" class="csrftoken" value="${getCookie('csrftoken')}">
+                                <div class="input_box">
+                                    <label for="update_title">Title</label>
+                                    <input class="update_title"  id="update_title" type="text" value="${title ? title : file.name.replace(/\.[^/.]+$/, "")}">
+                                </div>
+                                <button class="update_btn" type="submit" onclick="this.form.submitted=this.value;" value="update">update</button>
+                                <button class="delete_btn" type="submit" onclick="this.form.submitted=this.value;" value="delete"> delete </button>
+                            </form>
+                        </div>
+                    `
+                }else{
+                    li.classList.add("error")
+                    li_html_content = `
+                    <h3>${response.code}</h3>
+                    <p>${response.message}</p>
+                    `
+                    // remove error message from list after one second
+                    setTimeout(() => {
+                        uploaded_list.removeChild(li);
+                      }, 5000);
+                }
+
                 li.insertAdjacentHTML('beforeend', li_html_content);
                 // li.appendChild()
                 uploaded_list.appendChild(li)
 
                 // add listeners to newly uploaded form
                 uploaded_forms_listener()
+
             },
 
 

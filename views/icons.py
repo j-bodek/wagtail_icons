@@ -16,6 +16,7 @@ from icons.forms import IconForm
 from django.views.generic.base import TemplateView
 from django.http import HttpResponseBadRequest, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404
+import json
 
 
 class index(TemplateView):
@@ -38,6 +39,8 @@ class add(TemplateView):
 
     def post(self, request):
         if request.POST.get('action') == 'upload':
+
+
             if not request.FILES:
                 return HttpResponseBadRequest("Please upload a file")
             
@@ -57,6 +60,11 @@ class add(TemplateView):
                 icon.file.seek(0)
                 icon.save()
                 return JsonResponse({"icon_id":icon.id, "message":"Success"})
+            else:
+                if 'file' in form.errors.get_json_data().keys() and form.errors.get_json_data()['file']:
+                    error = form.errors.get_json_data()['file'][0]
+                    return JsonResponse(error)
+                return JsonResponse({"code":"Error"})
             
 
             return JsonResponse({"message":"Error"})

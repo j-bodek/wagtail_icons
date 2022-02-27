@@ -7,6 +7,6 @@ class IconForm(ModelForm):
         model = Icon
         fields = '__all__'
         widgets = {
-            'title': forms.TextInput(attrs={'placeholder':'If not specified title will be file name', 'id':'titleinput'}),
+            'title': forms.TextInput(attrs={'placeholder':'If not specified title will be file name', 'id':'titleinput', 'max_length':255}),
             'file': forms.FileInput(attrs={'id':'fileinput'}),
         }
