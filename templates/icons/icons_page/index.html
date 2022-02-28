@@ -1,8 +1,6 @@
 <!-- @usefull main icon page -->
 {% extends "wagtailadmin/base.html" %}
-{% load wagtailadmin_tags %}
-{% load wagtailimages_tags %}
-{% load i18n %}
+{% load static wagtailadmin_tags i18n %}
 
 
 {% block content %}
@@ -17,4 +15,8 @@
         </div>
     </div>
 
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'icons/js/index.js' %}"></script>
 {% endblock %}

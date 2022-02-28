@@ -22,6 +22,17 @@ import json
 class index(TemplateView):
     template_name = 'icons/icons_page/index.html'
 
+    def post(self, request):
+        if request.POST.getlist("icons_ids[]"):
+
+            icons_ids = request.POST.getlist("icons_ids[]")
+            Icon.objects.filter(id__in=icons_ids).delete()
+            
+
+            return JsonResponse({"message":"Success"})
+
+        return JsonResponse({"message":"No Icons Choosed"})
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 

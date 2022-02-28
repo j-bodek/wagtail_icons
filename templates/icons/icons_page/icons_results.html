@@ -3,11 +3,13 @@
 {% load i18n l10n %}
 {% if icons %}
 
-    <form action="">
+    <form id="choose_icons_form" action="">
+        {% csrf_token %}
         <ul class="listing horiz images">
             {% for icon in icons %}
                 <li>
                     <img src="{% get_media_prefix %}{{icon.file}}" style="width:150px;height:150px" alt="">
+                    <input type="checkbox" name="checkbox" value="{{icon.id}}">
                 </li>
             {% endfor %}
         </ul>
