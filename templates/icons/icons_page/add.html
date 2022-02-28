@@ -19,7 +19,14 @@
             <form id="fileform" mathod="POST" enctype="multipart/form-data" >
                
                 {% csrf_token %}
-                {{ form.as_table }}
+                {{ form.title }}
+                <div class="file_box">
+                    {{ form.file }}
+                    <div class="previewIcon_box">
+                        <img id="previewIcon" src="" alt="">
+                        <p id="wrong_format_info">Unsupported File Format</p>
+                    </div>
+                </div>
                 <input type="submit" value="Submit" id="Save">
 
             </form>
@@ -28,7 +35,7 @@
 
             
             <ul class="uploaded_icons_list" id="uploaded_icons_list" data-action_url="{% url 'wagtailicons:add' %}">
-                
+
             </ul>
             
     </div>

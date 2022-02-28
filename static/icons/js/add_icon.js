@@ -43,6 +43,21 @@ $(function() {
     }
 
 
+    document.querySelector("#fileinput").addEventListener("change",e=>{
+        let file = $("#fileinput").prop('files')[0];
+        if (['png', 'svg'].includes(file.name.split('.')[1])){
+            $("#previewIcon").attr("src", URL.createObjectURL(file))
+            $("#previewIcon").css("display", "block")
+            $("#wrong_format_info").css("display", "none")
+            $(".previewIcon_box").css("background", "#fafafa")
+        }else{
+            $("#previewIcon").attr("src", "")
+            $("#previewIcon").css("display", "none")
+            $("#wrong_format_info").css("display", "block")
+            $(".previewIcon_box").css("background", "#FB888A")
+        }
+    })
+
 
     $('#fileform').submit(function(e){
         e.preventDefault();    
@@ -64,8 +79,12 @@ $(function() {
             processData: false,
             success: function (response) {             
 
-                // reset form fields after sending data
+                // reset form fields and previewIcon after sending data
                 $('#fileform')[0].reset();
+                $("#previewIcon").attr("src", "")
+                $("#previewIcon").css("display", "none")
+                $("#wrong_format_info").css("display", "none")
+                $(".previewIcon_box").css("background", "#fafafa")
         
                 let uploaded_list = document.getElementById("uploaded_icons_list");
                 

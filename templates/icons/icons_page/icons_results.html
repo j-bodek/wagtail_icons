@@ -3,14 +3,18 @@
 {% load i18n l10n %}
 {% if icons %}
 
+    <form action="">
+        <ul class="listing horiz images">
+            {% for icon in icons %}
+                <li>
+                    <img src="{% get_media_prefix %}{{icon.file}}" style="width:150px;height:150px" alt="">
+                </li>
+            {% endfor %}
+        </ul>
+        <input type="submit" value="Delete">
+    </form>
 
-    <ul class="listing horiz images">
-        {% for icon in icons %}
-            <li>
-                <img src="{% get_media_prefix %}{{icon.file}}" style="width:150px;height:150px" alt="">
-            </li>
-        {% endfor %}
-    </ul>
+
 
 
 {% else %}
