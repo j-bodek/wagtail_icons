@@ -17,16 +17,20 @@ from django.views.generic.base import TemplateView
 from django.http import HttpResponseBadRequest, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404
 import json
+# from icons.fields import IconsField
 
 
 class index(TemplateView):
     template_name = 'icons/icons_page/index.html'
+
 
     def post(self, request):
         if request.POST.getlist("icons_ids[]"):
 
             icons_ids = request.POST.getlist("icons_ids[]")
             Icon.objects.filter(id__in=icons_ids).delete()
+            # IconsField.choices = Icon.objects.all().values_list("file","title")
+
             
 
             return JsonResponse({"message":"Success"})
@@ -78,7 +82,6 @@ class add(TemplateView):
                 return JsonResponse({"code":"Error"})
             
 
-            return JsonResponse({"message":"Error"})
         elif request.POST.get('action') == 'update':
             if Icon.objects.filter(id=request.POST.get('icon_id')):
                 update_icon = Icon.objects.filter(id=request.POST.get('icon_id'))
