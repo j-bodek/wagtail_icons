@@ -25,11 +25,11 @@ class index(TemplateView):
 
 
     def post(self, request):
-        if request.POST.getlist("icons_ids[]"):
-
-            icons_ids = request.POST.getlist("icons_ids[]")
-            Icon.objects.filter(id__in=icons_ids).delete()
-            # IconsField.choices = Icon.objects.all().values_list("file","title")
+        if request.POST.getlist("icons[]"):
+            if 'type' in request.POST.dict().keys() and request.POST.get("type") == 'delete':
+                icons_ids = request.POST.getlist("icons[]")
+                Icon.objects.filter(id__in=icons_ids).delete()
+                # IconsField.choices = Icon.objects.all().values_list("file","title")
 
             
 

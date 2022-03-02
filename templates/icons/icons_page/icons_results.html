@@ -5,15 +5,18 @@
 
     <form id="choose_icons_form" action="">
         {% csrf_token %}
-        <ul class="listing horiz images">
+        <ul class="icons">
             {% for icon in icons %}
-                <li>
-                    <img src="{% get_media_prefix %}{{icon.file}}" style="width:150px;height:150px" alt="">
-                    <input type="checkbox" name="checkbox" value="{{icon.id}}">
+                <li class="icon_choice_box">
+                    <img class="icon_choice" src="{% get_media_prefix %}{{icon.file}}" style="width:150px;height:150px" alt="">
+                    <input class="icon_input" type="checkbox" name="checkbox" value="{{icon.id}}">
                 </li>
             {% endfor %}
         </ul>
-        <input type="submit" value="Delete">
+        <div class="button_box">
+            <button id="edit_btn" type="submit" onclick="this.form.submitted=this.value;" value="edit">Edit</button>
+            <button id="delete_btn" type="submit" onclick="this.form.submitted=this.value;" value="delete"> Delete </button>
+        </div>
     </form>
 
 

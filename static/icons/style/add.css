@@ -127,7 +127,6 @@
     border: 1px solid #b4191f;
 }
 .content_box>form>.delete_btn:hover{
-    color:#fff;
     background-color: #b4191f;
 }
 
