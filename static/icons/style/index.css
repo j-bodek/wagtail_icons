@@ -7,7 +7,7 @@
     border-radius:10px;
 }
 
-#choose_icons_form>.button_box{
+.button_box{
     display:none;
     text-align:center;
     position:absolute;
@@ -18,7 +18,7 @@
     bottom:0;
 }
 
-#choose_icons_form>.button_box>button{
+.button_box>button{
     width:100px;
     height:50px;
     border-radius:10px;

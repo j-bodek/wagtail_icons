@@ -1,5 +1,6 @@
 $(function() {
 
+    // display or hide action buttons
     let display_buttons = function() {
         let checked = []
         document.querySelectorAll('.icon_input').forEach(icon_choice=>checked.push(icon_choice.checked))
@@ -10,20 +11,22 @@ $(function() {
         }
     }
 
+
+    // submit form
+    $('.main_button').click(e=>{
+        form = document.getElementById("choose_icons_form")
+        form.action = e.target.value
+        form.submit()
+    })
+
+
     $("#choose_icons_form").submit(function(e) {
+        e.preventDefault()
         let icons_ids = []
         document.querySelectorAll('input[name=checkbox]:checked').forEach(input=>icons_ids.push(input.value))
-        $.ajax({
-            type: 'POST',
-            url: '',
-            data: {
-                'type': e.target.submitted,
-                'icons': icons_ids,
-                'csrfmiddlewaretoken': e.target.querySelector("input[name=csrfmiddlewaretoken]").value,
-            },
-        });
     });
 
+    // style icon choice after choosing it
     document.querySelectorAll('.icon_choice').forEach(icon_choice=>{
         icon_choice.addEventListener('click', e=>{
             icon_choice.classList.toggle('icon_active')

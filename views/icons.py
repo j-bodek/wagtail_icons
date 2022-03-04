@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 from wagtail.admin.views.generic.multiple_upload import AddView as BaseAddView
 from wagtail.images import get_image_model
@@ -25,17 +25,14 @@ class index(TemplateView):
 
 
     def post(self, request):
-        if request.POST.getlist("icons[]"):
-            if 'type' in request.POST.dict().keys() and request.POST.get("type") == 'delete':
-                icons_ids = request.POST.getlist("icons[]")
+        print(request.POST)
+        if request.POST.getlist("icons"):
+            if 'type' in request.POST.dict().keys() and request.POST.get("type"):
+                icons_ids = request.POST.getlist("icons")
                 Icon.objects.filter(id__in=icons_ids).delete()
-                # IconsField.choices = Icon.objects.all().values_list("file","title")
+                return JsonResponse({"message":"Success"})
 
-            
-
-            return JsonResponse({"message":"Success"})
-
-        return JsonResponse({"message":"No Icons Choosed"})
+        return JsonResponse({"message":"No icons specified"})
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -54,7 +51,6 @@ class add(TemplateView):
 
     def post(self, request):
         if request.POST.get('action') == 'upload':
-
 
             if not request.FILES:
                 return HttpResponseBadRequest("Please upload a file")
@@ -111,3 +107,26 @@ class add(TemplateView):
         })
 
         return context
+
+
+class edit(TemplateView):
+    template_name = 'icons/icons_page/edit.html'
+
+    def post(self, request, *args, **kwargs):
+        if request.POST.getlist("icons"):
+            if 'type' in request.POST.dict().keys():
+                
+                context = self.get_context_data(**kwargs)
+                icons_ids = request.POST.getlist("icons")
+                print(icons_ids)
+                context.update({
+                    'icons': Icon.objects.filter(id__in=icons_ids),
+                })
+
+                print(context)
+
+                return render(request, self.template_name, context=context)
+
+
+        return JsonResponse({"message":"No Icons Choosed"})
+
