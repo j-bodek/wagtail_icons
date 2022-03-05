@@ -28,7 +28,7 @@ $(function() {
     });
 
     // style icon choice after choosing it
-    document.querySelectorAll('.icon_choice').forEach(icon_choice=>{
+    document.querySelectorAll('.icon').forEach(icon_choice=>{
         icon_choice.addEventListener('click', e=>{
             icon_choice.classList.toggle('icon_active')
             let input = icon_choice.closest('.icon_choice_box').querySelector(".icon_input");
@@ -41,6 +41,49 @@ $(function() {
             display_buttons()
         })
     })
+
+
+    // // display icon title after hover on it
+    // document.querySelectorAll('.icon_choice').forEach(icon_choice=>{
+    //     icon_choice.addEventListener('mouseover', e=>{
+    //         // get coordinates of icon_choice
+    //         let container_coordinates = document.getElementById("main").getBoundingClientRect();
+    //         let icon_coordinates = icon_choice.getBoundingClientRect();
+    //         let icon_title = document.getElementById(`icon_title_${icon_choice.dataset.id}`)
+    //         icon_title.style.display = 'inline-block'
+    //         icon_title.style.left = `${icon_coordinates.left-container_coordinates.left}px`
+    //         icon_title.style.top = `${icon_coordinates.top-container_coordinates.top-20}px`
+    //         // e.target.closest('.icon_title').style.display = 'block'
+    //         // icon_choice.classList.toggle('icon_active')
+    //         // let input = icon_choice.closest('.icon_choice_box').querySelector(".icon_input");
+    //         // if (input.checked) {
+    //         //     input.checked = false;
+    //         // }else{
+    //         //     input.checked = true;
+    //         // }
+
+    //         // display_buttons()
+    //     })
+    // })
+
+    // document.querySelectorAll('.icon_choice').forEach(icon_choice=>{
+    //     icon_choice.addEventListener('mouseout', e=>{
+    //         // get coordinates of icon_choice
+    //         let coordinates = icon_choice.getBoundingClientRect();
+    //         let icon_title = document.getElementById(`icon_title_${icon_choice.dataset.id}`)
+    //         icon_title.style.display = 'none'
+    //         // e.target.closest('.icon_title').style.display = 'block'
+    //         // icon_choice.classList.toggle('icon_active')
+    //         // let input = icon_choice.closest('.icon_choice_box').querySelector(".icon_input");
+    //         // if (input.checked) {
+    //         //     input.checked = false;
+    //         // }else{
+    //         //     input.checked = true;
+    //         // }
+
+    //         // display_buttons()
+    //     })
+    // })
 
 
 
