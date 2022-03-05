@@ -25,12 +25,11 @@ class index(TemplateView):
 
 
     def post(self, request):
-        print(request.POST)
         if request.POST.getlist("icons"):
-            if 'type' in request.POST.dict().keys() and request.POST.get("type"):
+            if 'type' in request.POST.dict().keys() and request.POST.get("type") == 'delete':
                 icons_ids = request.POST.getlist("icons")
                 Icon.objects.filter(id__in=icons_ids).delete()
-                return JsonResponse({"message":"Success"})
+                return render(request, self.template_name, context=self.get_context_data())
 
         return JsonResponse({"message":"No icons specified"})
 
@@ -82,7 +81,7 @@ class add(TemplateView):
             if Icon.objects.filter(id=request.POST.get('icon_id')):
                 update_icon = Icon.objects.filter(id=request.POST.get('icon_id'))
                 update_icon.update(title=request.POST.get('title'))
-                return JsonResponse({"message":"Icon Deleted"})
+                return JsonResponse({"message":"Icon Updated"})
 
             return JsonResponse({"message":"Error"})
 
@@ -114,18 +113,30 @@ class edit(TemplateView):
 
     def post(self, request, *args, **kwargs):
         if request.POST.getlist("icons"):
-            if 'type' in request.POST.dict().keys():
+            if 'type' in request.POST.dict().keys() and request.POST.get('type') == 'edit':
                 
                 context = self.get_context_data(**kwargs)
                 icons_ids = request.POST.getlist("icons")
-                print(icons_ids)
                 context.update({
                     'icons': Icon.objects.filter(id__in=icons_ids),
                 })
-
-                print(context)
-
                 return render(request, self.template_name, context=context)
+
+        if 'type' in request.POST.dict().keys() and request.POST.get('type') == 'update':
+            if Icon.objects.filter(id=request.POST.get('icon_id')):
+                update_icon = Icon.objects.filter(id=request.POST.get('icon_id'))
+                update_icon.update(title=request.POST.get('title'))
+                return JsonResponse({"message":"Icon Updated"})
+
+            return JsonResponse({"message":"Error"})
+
+        if 'type' in request.POST.dict().keys() and request.POST.get('type') == 'delete':
+            if Icon.objects.filter(id=request.POST.get('icon_id')):
+                delete_icon = get_object_or_404(Icon, id=request.POST.get('icon_id'))
+                delete_icon.delete()
+                return JsonResponse({"message":"Icon Deleted"})
+
+            return JsonResponse({"message":"Error"})
 
 
         return JsonResponse({"message":"No Icons Choosed"})

@@ -21,18 +21,18 @@
                         </div>
                         <div class="content_box">
                             <p class="message">Upload Successful. You can now update icon with new title or delete icon completely.</p>
-                            <form class="updateform" method="POST" data-icon_id="">
-                                <input type="hidden" name="csrfmiddlewaretoken" class="csrftoken" value="{{csrf_token}}">
+                            <form class="editform" method="POST">
+                                <input type="hidden" name="csrfmiddlewaretoken" value="{{csrf_token}}">
+                                <input type="hidden" name="icon_id" value="{{icon.id}}">
                                 <div class="input_box">
                                     <label for="update_title">Title</label>
-                                    <input class="update_title"  id="update_title" type="text" value="{{icon.title}}">
+                                    <input class="update_title"  name="update_title" type="text" value="{{icon.title}}">
                                 </div>
                                 <button class="update_btn" type="submit" onclick="this.form.submitted=this.value;" value="update">update</button>
                                 <button class="delete_btn" type="submit" onclick="this.form.submitted=this.value;" value="delete"> delete </button>
                             </form>
                         </div>
                     </li>
-                    <!-- {{icon}} -->
                 {% endfor %}
             </ul>
             
@@ -44,6 +44,6 @@
 {% endblock %}
 
 {% block extra_js %}
-    <!-- <script src="{% static 'icons/js/add_icon.js' %}"></script> -->
+    <script src="{% static 'icons/js/edit.js' %}"></script>
 
 {% endblock %}

@@ -15,6 +15,7 @@ $(function() {
     // submit form
     $('.main_button').click(e=>{
         form = document.getElementById("choose_icons_form")
+        $(".type_input").val(e.target.dataset.type)
         form.action = e.target.value
         form.submit()
     })

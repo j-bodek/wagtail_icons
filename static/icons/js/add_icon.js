@@ -1,6 +1,6 @@
 $(function() {
 
-    let uploaded_forms_listener = function(){
+    let update_forms_listener = function(){
         document.querySelectorAll('.updateform').forEach((form)=>{
             form.addEventListener('submit', function(e){
                 e.preventDefault();
@@ -127,7 +127,7 @@ $(function() {
                 uploaded_list.appendChild(li)
 
                 // add listeners to newly uploaded form
-                uploaded_forms_listener()
+                update_forms_listener()
 
             },
 

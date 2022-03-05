@@ -3,8 +3,10 @@
     background: #f6f6f6;
     border: 2px solid #e6e6e6;
     display:flex;
-    height:200px;
+    flex-wrap: wrap;
+    justify-content: center;
     border-radius:10px;
+    margin-bottom: 100px;
 }
 
 .button_box{
