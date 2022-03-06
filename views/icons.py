@@ -55,26 +55,36 @@ class add(TemplateView):
                 return HttpResponseBadRequest("Please upload a file")
             
             # get specified title or file title if specified doesn't exist
-            file_title = request.POST.get('title') if request.POST.get('title') else request.FILES['file'].name.rsplit(".", 1)[0]
-            form = IconForm({
-                'title': file_title,
-            },{
-                'file': request.FILES['file'],
-            })
 
-            if form.is_valid():
-                # Save it
-                icon = form.save(commit=False)
-                icon.uploaded_by_user = self.request.user
-                icon.file_size = icon.file.size
-                icon.file.seek(0)
-                icon.save()
-                return JsonResponse({"icon_id":icon.id, "message":"Success"})
-            else:
-                if 'file' in form.errors.get_json_data().keys() and form.errors.get_json_data()['file']:
-                    error = form.errors.get_json_data()['file'][0]
-                    return JsonResponse(error)
-                return JsonResponse({"code":"Error"})
+            return_data = []
+            icons = request.FILES.getlist('icons')
+            urls = request.POST.getlist('urls')
+            for file, url in zip(icons, urls):
+
+                file_title = request.POST.get('title') if request.POST.get('title') and len(icons) == 1 else file.name.rsplit(".", 1)[0]
+
+                form = IconForm({
+                    'title': file_title,
+                },{
+                    'file': file,
+                })
+
+                if form.is_valid():
+                    # Save it
+                    icon = form.save(commit=False)
+                    icon.uploaded_by_user = self.request.user
+                    icon.file_size = icon.file.size
+                    icon.file.seek(0)
+                    icon.save()
+                    return_data.append({"icon_id":icon.id, "icon_url":url, 'icon_title':file.name, "message":"Success"})
+                else:
+                    if 'file' in form.errors.get_json_data().keys() and form.errors.get_json_data()['file']:
+                        error = form.errors.get_json_data()['file'][0]
+                        return_data.append(error)
+
+            return JsonResponse(return_data, safe=False)
+
+
             
 
         elif request.POST.get('action') == 'update':

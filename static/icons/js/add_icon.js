@@ -21,6 +21,48 @@ $(function() {
         });
     };
 
+
+    let upload_icon_form = function(uploaded_list, icon){
+        let li = document.createElement("li");
+        li.className = "uploaded_icon"
+        let li_html_content = ``;
+        if (! icon.code){
+            li_html_content = `
+                <div class="icon_box">
+                    <img src="${icon.icon_url}" class="icon">
+                </div>
+                <div class="content_box">
+                    <p class="message">Upload Successful. You can now update icon with new title or delete icon completely.</p>
+                    <form class="updateform" method="POST" data-icon_id="${icon.icon_id}">
+                        <input type="hidden" name="csrfmiddlewaretoken" class="csrftoken" value="${getCookie('csrftoken')}">
+                        <div class="input_box">
+                            <label for="update_title">Title</label>
+                            <input class="update_title"  id="update_title" type="text" value="${icon.icon_title.replace(/\.[^/.]+$/, "")}">
+                        </div>
+                        <button class="update_btn" type="submit" onclick="this.form.submitted=this.value;" value="update">update</button>
+                        <button class="delete_btn" type="submit" onclick="this.form.submitted=this.value;" value="delete"> delete </button>
+                    </form>
+                </div>
+            `
+        }else{
+            li.classList.add("error")
+            li_html_content = `
+            <h3>${icon.code}</h3>
+            <p>${icon.message}</p>
+            `
+            // remove error message from list after one second
+            setTimeout(() => {
+                uploaded_list.removeChild(li);
+              }, 5000);
+        }
+
+        li.insertAdjacentHTML('beforeend', li_html_content);
+        // li.appendChild()
+        uploaded_list.appendChild(li)
+    }
+
+
+
     // helper function for getting csrftoken value
     function getCookie(name) {
         let cookieValue = null;
@@ -44,7 +86,13 @@ $(function() {
 
 
     document.querySelector("#fileinput").addEventListener("change",e=>{
-        let file = $("#fileinput").prop('files')[0];
+        let file = $("#fileinput").prop('files');
+        if (file.length > 1) {
+            return;
+        }else{
+            file = file[0]
+        }
+        
         if (['png', 'svg'].includes(file.name.split('.')[1])){
             $("#previewIcon").attr("src", URL.createObjectURL(file))
             $("#previewIcon").css("display", "block")
@@ -68,16 +116,23 @@ $(function() {
         formData.append('action','upload');
         formData.append('csrfmiddlewaretoken', $("input[name=csrfmiddlewaretoken]").val());
         // add file to formData
-        let file = $("#fileinput").prop('files')[0];
-        formData.append('file', file),
+        let files = $("#fileinput").prop('files');
+        for (let i = 0; i < files.length; i++) {
+            formData.append(`icons`, files[i]);
+            formData.append(`urls`, URL.createObjectURL(files[i]));
+        }
+        // console.log( $("#fileinput").prop('files')[0])
+        // formData.append('files', files),
         // send formData
+
         $.ajax({
             url: '',
             type: 'POST',
             data: formData,
             contentType: false,
             processData: false,
-            success: function (response) {             
+            success: function (response) {       
+                console.log(response)      
 
                 // reset form fields and previewIcon after sending data
                 $('#fileform')[0].reset();
@@ -88,43 +143,10 @@ $(function() {
         
                 let uploaded_list = document.getElementById("uploaded_icons_list");
                 
-        
-                let li = document.createElement("li");
-                li.className = "uploaded_icon"
-                let li_html_content = ``;
-                if (! response.code){
-                    li_html_content = `
-                        <div class="icon_box">
-                            <img src="${URL.createObjectURL(file)}" class="icon">
-                        </div>
-                        <div class="content_box">
-                            <p class="message">Upload Successful. You can now update icon with new title or delete icon completely.</p>
-                            <form class="updateform" method="POST" data-icon_id="${response.icon_id}">
-                                <input type="hidden" name="csrfmiddlewaretoken" class="csrftoken" value="${getCookie('csrftoken')}">
-                                <div class="input_box">
-                                    <label for="update_title">Title</label>
-                                    <input class="update_title"  id="update_title" type="text" value="${title ? title : file.name.replace(/\.[^/.]+$/, "")}">
-                                </div>
-                                <button class="update_btn" type="submit" onclick="this.form.submitted=this.value;" value="update">update</button>
-                                <button class="delete_btn" type="submit" onclick="this.form.submitted=this.value;" value="delete"> delete </button>
-                            </form>
-                        </div>
-                    `
-                }else{
-                    li.classList.add("error")
-                    li_html_content = `
-                    <h3>${response.code}</h3>
-                    <p>${response.message}</p>
-                    `
-                    // remove error message from list after one second
-                    setTimeout(() => {
-                        uploaded_list.removeChild(li);
-                      }, 5000);
+                // display uploaded icon
+                for (let i = 0; i < response.length; i++) {
+                    upload_icon_form(uploaded_list, response[i])
                 }
-
-                li.insertAdjacentHTML('beforeend', li_html_content);
-                // li.appendChild()
-                uploaded_list.appendChild(li)
 
                 // add listeners to newly uploaded form
                 update_forms_listener()
