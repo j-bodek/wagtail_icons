@@ -1,0 +1,30 @@
+{% load static %}
+
+
+{% with id=widget.attrs.id %}
+    <div{% if id %} id="{{ id }}"{% endif %} class="select-box">
+        <div class="options-container">
+            {% for group, options, index in widget.optgroups %}
+                {% for option in options %}
+               
+                    {% include option.template_name with widget=option %}
+                    
+                {% endfor %}
+            {% endfor %}
+        </div>
+        <div class="selected">
+            {% for group, options, index in widget.optgroups %}
+                {% for option in options %}
+                    {% if option.selected and option.value != '' %}
+                        <p class="selected_text"><img src="{% get_media_prefix %}{{option.value.instance.file}}" alt=""> {{option.label}}</p>
+                    {% elif option.selected and option.value == '' %}
+                        <p class="selected_text">Select Icon</p>
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+            <i class="bi bi-caret-down-fill" id="arrow_icon"></i>
+        </div>
+    </div>
+{% endwith %}
+
+

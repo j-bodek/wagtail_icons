@@ -1,0 +1,49 @@
+{% extends "wagtailadmin/base.html" %}
+{% load i18n %}
+{% load l10n %}
+{% load static wagtailadmin_tags wagtailimages_tags %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% versioned_static 'wagtailimages/css/add-multiple.css' %}" type="text/css" />
+<link rel="stylesheet" href="{% static 'wagtail_icons/style/add.css' %}" type="text/css" />
+{% endblock %}
+
+{% block content %}
+    {% include "wagtailadmin/shared/header.html" with title="EDIT ICONS" icon="tick-inverse" %}
+
+    <div class="nice-padding">
+     
+            
+            <ul class="uploaded_icons_list" id="uploaded_icons_list" data-action_url="{% url 'wagtailicons:add' %}">
+                {% for icon in icons %} 
+                    <li class="uploaded_icon">
+                        <div class="icon_box">
+                            <img src="{% get_media_prefix %}{{icon.file}}" class="icon">
+                        </div>
+                        <div class="content_box">
+                            <p class="message">Upload Successful. You can now update icon with new title or delete icon completely.</p>
+                            <form class="editform" method="POST">
+                                <input type="hidden" name="csrfmiddlewaretoken" value="{{csrf_token}}">
+                                <input type="hidden" name="icon_id" value="{{icon.id}}">
+                                <div class="input_box">
+                                    <label for="update_title">Title</label>
+                                    <input class="update_title"  name="update_title" type="text" value="{{icon.title}}">
+                                </div>
+                                <button class="update_btn" type="submit" onclick="this.form.submitted=this.value;" value="update">update</button>
+                                <button class="delete_btn" type="submit" onclick="this.form.submitted=this.value;" value="delete"> delete </button>
+                            </form>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+            
+    </div>
+
+
+
+
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'wagtail_icons/js/edit.js' %}"></script>
+
+{% endblock %}

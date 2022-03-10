@@ -1,0 +1,35 @@
+<!-- @usefull display images -->
+{% load static wagtailimages_tags wagtailadmin_tags %}
+{% load i18n l10n %}
+{% if icons %}
+
+    <form id="choose_icons_form" method="POST" action="edit/">
+        {% csrf_token %}
+        <ul class="icons">
+            {% for icon in icons %}
+               
+                <!-- <div class="icon_title icon_title_left" id="icon_title_{{icon.id}}">https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_shapes_triangle-left</div> -->
+               
+                <li class="icon_choice_box">
+                    <div class="icon">
+                        <div class="icon_overlay"><p>{{icon.title}}</p></div>
+                        <img class="icon_choice" src="{% get_media_prefix %}{{icon.file}}" data-id="{{icon.id}}" alt="{{icon.title}}"style="width:150px;height:150px" alt="">
+                    </div>
+                    <input class="icon_input" type="checkbox" name="icons" value="{{icon.id}}">
+                </li>
+            {% endfor %}
+        </ul>
+        <input type="hidden" name="type" class="type_input">
+    </form>
+
+    <div class="button_box">
+        <button class="main_button" id="edit_btn" type="submit" data-type='edit' value="{% url 'wagtailicons:edit' %}">Edit</button>
+        <button class="main_button" id="delete_btn" data-type="delete" value=""> Delete </button>
+    </div>
+
+
+
+
+{% else %}
+    <p>You haven't uploaded any icons.</p>
+{% endif %}
