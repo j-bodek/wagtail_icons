@@ -1,5 +1,6 @@
 # Wagtail Icons
 
+![](images/wagtail_icons.gif)
 ## Install
 
 ```
@@ -19,8 +20,9 @@ INSTALLED_APPS = [
 
 
 ```python
+from wagtail.core.models import Page
 from wagtail_icons.edit_handlers import IconsChooserPanel
-from wagtail_icons.models.upload import Icon
+from wagtail_icons.fields import IconsField
 
 class iconsPage(Page):
     template_name = 'yourapp/yourtemplate'
