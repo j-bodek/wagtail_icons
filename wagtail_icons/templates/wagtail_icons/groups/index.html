@@ -1,0 +1,26 @@
+<!-- @usefull main icon page -->
+{% extends "wagtailadmin/base.html" %}
+{% load static wagtailadmin_tags i18n %}
+
+{% block extra_css %}
+    
+{% endblock %}
+
+
+{% block content %}
+
+    {% url "wagtailicons:add" as add_icon %}
+    {% include "wagtail_icons/icons_page/icons_header.html" with title="Icon Groups" groups="False" action_url=add_icon action_text='Add Group' icon="tick-inverse" %}
+
+    
+    <div class="nice-padding">
+        <div id="image-results">
+            
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block extra_js %}
+
+{% endblock %}

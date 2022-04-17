@@ -1,0 +1,17 @@
+{% extends "wagtailadmin/shared/header.html" %}
+{% load i18n wagtailadmin_tags %}
+{% block right_column %}
+<div style="display:flex">
+    {% if groups == "True" %}
+        <div class="actionbutton" style="margin-right:15px">
+            {% url "wagtailicons:groups" as groups %}
+            <a href="{{groups}}" class="button">Groups</a>
+        </div>
+    {% endif %}
+    <div class="actionbutton">
+        {% with action_icon|default:'plus' as action_icon_name %}
+        <a href="{{ action_url }}" class="button bicolor button--icon">{% icon name=action_icon_name wrapped=1 %}{{ action_text }}</a>
+        {% endwith %}
+    </div>
+</div>
+{% endblock %}
