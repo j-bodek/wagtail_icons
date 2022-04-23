@@ -3,7 +3,7 @@
 {% load static wagtailadmin_tags i18n %}
 
 {% block extra_css %}
-    
+    <link rel="stylesheet" href="{% static 'wagtail_icons/style/groups.css' %}" type="text/css" />
 {% endblock %}
 
 
@@ -14,9 +14,29 @@
 
     
     <div class="nice-padding">
-        <div id="image-results">
-            
+
+        <div class="groups-box">
+            <table class="groups-table">
+                <tr class="groups-table-header">
+                    <th></th>
+                    <th>Title</th>
+                    <th>Slug</th>
+                </tr>
+                <tr class="group">
+                    <td>
+                        <input class="group-checkbox" type="checkbox">
+                    </td>
+                    <td>
+                        Group Title
+                    </td>
+                    <td>
+                        Group Slug
+                        <button class="content-button">View</button>
+                    </td>
+                </tr>
+            </table>
         </div>
+
     </div>
 
 {% endblock %}
