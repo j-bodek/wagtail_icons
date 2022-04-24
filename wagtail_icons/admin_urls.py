@@ -10,4 +10,5 @@ urlpatterns = [
     path('edit/', icons.edit.as_view(), name='edit'),
     # groups urls
     path('groups/', groups.index.as_view(), name='groups'),
+    path('groups/add/', groups.add.as_view(), name='add_group'),
 ]

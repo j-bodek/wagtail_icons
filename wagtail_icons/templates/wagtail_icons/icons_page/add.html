@@ -16,7 +16,7 @@
      
             <p>{{ help_text }}</p>
 
-            <form id="fileform" mathod="POST" enctype="multipart/form-data" >
+            <form id="fileform" method="POST" enctype="multipart/form-data" >
                
                 {% csrf_token %}
                 {{ form.title }}

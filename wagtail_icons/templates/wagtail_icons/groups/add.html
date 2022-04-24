@@ -1,0 +1,35 @@
+
+<!-- @usefull main icon page -->
+{% extends "wagtailadmin/base.html" %}
+{% load static wagtailadmin_tags i18n %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'wagtail_icons/style/groups.css' %}" type="text/css" />
+{% endblock %}
+
+
+{% block content %}
+
+    {% url "wagtailicons:add_group" as add_group %}
+    {% include "wagtail_icons/icons_page/icons_header.html" with title="Icon Groups" groups="False" action_url=add_group action_text='Add Group' icon="tick-inverse" %}
+
+    
+    <div class="nice-padding">
+
+        <form id="fileform" action="{% url 'wagtailicons:add_group' %}" method="post">
+           
+            {% csrf_token %}
+            {{ form.title }}
+            {{ form.slug }}
+            {{ form.icons }}
+            <input class="add_button" type="submit" value="Submit" id="Save">
+        
+        </form>
+
+    </div>
+
+{% endblock %}
+
+{% block extra_js %}
+
+{% endblock %}

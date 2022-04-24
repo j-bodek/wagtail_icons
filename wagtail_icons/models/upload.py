@@ -7,7 +7,7 @@ from django.utils.translation import gettext_lazy as _
 from django.dispatch import receiver
 from django.core.validators import FileExtensionValidator
 
-ALLOWED_EXTENSIONS = ['svg', 'png']
+ALLOWED_EXTENSIONS = ['svg']
 
 class Icon(models.Model): 
     title = models.CharField(max_length=255, verbose_name=_('title'), blank=True)

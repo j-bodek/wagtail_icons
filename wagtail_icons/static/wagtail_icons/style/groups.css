@@ -60,3 +60,18 @@
 .content-button:hover{
     background-color: #F5F5F5;
 }
+
+#fileform>.add_button{
+    margin-top:20px;
+    width:100px;
+    height:40px;
+    border-radius: 10px;
+    border: 0px;
+    transition: all 0.2s;
+    background-color:#007d7e;
+    color:#fff;
+}
+
+#fileform>.add_button:hover{
+    background-color: #006465;
+}

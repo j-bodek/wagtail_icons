@@ -9,8 +9,8 @@
 
 {% block content %}
 
-    {% url "wagtailicons:add" as add_icon %}
-    {% include "wagtail_icons/icons_page/icons_header.html" with title="Icon Groups" groups="False" action_url=add_icon action_text='Add Group' icon="tick-inverse" %}
+    {% url "wagtailicons:add_group" as add_group %}
+    {% include "wagtail_icons/icons_page/icons_header.html" with title="Icon Groups" groups="False" action_url=add_group action_text='Add Group' icon="tick-inverse" %}
 
     
     <div class="nice-padding">
@@ -22,18 +22,20 @@
                     <th>Title</th>
                     <th>Slug</th>
                 </tr>
+                {% for group in groups %}
                 <tr class="group">
                     <td>
                         <input class="group-checkbox" type="checkbox">
                     </td>
                     <td>
-                        Group Title
+                        {{group.title}}
                     </td>
                     <td>
-                        Group Slug
+                        {{group.slug}}
                         <button class="content-button">View</button>
                     </td>
                 </tr>
+                {% endfor %}
             </table>
         </div>
 
