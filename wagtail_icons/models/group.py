@@ -11,6 +11,6 @@ from wagtail_icons.models import Icon
 ALLOWED_EXTENSIONS = ['svg']
 
 class Group(models.Model): 
-    title = models.CharField(max_length=255, verbose_name=_('title'), blank=False, null=False)
-    slug = models.CharField(max_length=255, blank=False, null=False)
-    icons = models.ManyToManyField(Icon, blank=True, null=True)
+    title = models.CharField(max_length=255, verbose_name=_('title'), unique=True, blank=False, null=False)
+    slug = models.CharField(max_length=255, blank=False, null=False, unique=True)
+    icons = models.ManyToManyField(Icon, blank=True)

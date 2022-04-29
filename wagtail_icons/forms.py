@@ -1,6 +1,7 @@
 from django.forms import ModelForm
 from .models import Icon, Group
 from django import forms
+import re
 
 class IconForm(ModelForm):
     class Meta:
@@ -17,5 +18,17 @@ class GroupForm(ModelForm):
         fields = '__all__'
         widgets = {
             'title': forms.TextInput(attrs={'placeholder':'Group Title'}),
-            'slug': forms.TextInput(attrs={'placeholder':'Slug should contain only lowercase letters, numbers and -,_'})
+            'slug': forms.TextInput(attrs={'placeholder':'Slug field can contains only lowercase letters, numbers, underscore "_" and dashes "-"'})
         }
+
+    def clean(self):
+        super(GroupForm, self).clean()
+        slug = self.cleaned_data.get("slug")
+        # validate slug field
+        if not re.match(r'^[a-z0-9_-]+$', slug):
+            print("hello")
+            self._errors['slug'] = self.error_class([
+                'Slug field can contains only lowercase letters, numbers, underscore "_" and dashes "-"'])
+
+        # return any errors if found
+        return self.cleaned_data

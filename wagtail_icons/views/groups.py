@@ -3,7 +3,8 @@ from wagtail_icons.models import Icon
 from wagtail_icons.forms import GroupForm
 from django.views.generic.base import TemplateView
 from django.http import JsonResponse
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render, redirect
+from wagtail.admin import messages
 from wagtail_icons.models import Group
 
 
@@ -25,7 +26,7 @@ class add(TemplateView):
     def post(self, request):
         if request.method == 'POST':
 
-            return_data = []
+            return_data = {}
             form = GroupForm(request.POST)
 
             if form.is_valid():
@@ -33,12 +34,13 @@ class add(TemplateView):
                 group = form.save(commit=False)
                 group.save()
                 form.save_m2m()
-                return_data.append({"icon_id":group.id, 'group_slug':group.slug, 'group_title':group.title, "message":"Success"})
+                # return_data = {"icon_id":group.id, 'group_slug':group.slug, 'group_title':group.title, "message":"Success"}
+                messages.success(request, f"Successfully created {group.title}!")
+                return redirect('wagtailicons:groups')
             else:
                 error = '\n'.join([f"{key} - {value[0].get('message')}" for key, value in form.errors.get_json_data().items()])
-                return_data.append({"error_message":error, "message":"Error"})
-
-            return JsonResponse(return_data, safe=False)
+                messages.error(request, error)
+                return render(request, self.template_name, context=self.get_context_data())
 
 
 
