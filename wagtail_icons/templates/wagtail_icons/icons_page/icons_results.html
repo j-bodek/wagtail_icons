@@ -27,7 +27,7 @@
     </form>
 
     <div class="button_box">
-        {% if not group %}
+        {% if not group and not action == 'add' %}
             <button class="main_button" id="edit_btn" type="submit" data-type='edit' value="{% url 'wagtailicons:edit' %}">Edit</button>
         {% endif %}
         {% if not action == 'add' %}

@@ -20,7 +20,6 @@ $(function() {
             $(".group_input").val(e.target.dataset.group_id)
         }
         form.action = e.target.value
-        console.log(form.action)
         form.submit()
     })
 

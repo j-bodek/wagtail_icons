@@ -11,7 +11,13 @@
 {% endblock %}
 
 {% block content %}
-    {% include "wagtailadmin/shared/header.html" with title="ADD ICONS" icon="tick-inverse" %}
+
+
+    {% url "wagtailicons:index" as view_group %}
+    {% url "wagtailicons:groups" as groups %}
+    {% with group.title as group_title %}
+    {% include "wagtail_icons/icons_page/icons_header.html" with title="Add "|add:group_title|add:" icons" second_btn=groups second_btn_text='Groups' action_url=view_group group=group action_text='Back' %}
+    {% endwith %}
 
     <div class="nice-padding">
 
@@ -45,9 +51,11 @@
     
             </ul>
         </div>
-        <div class="existing_icon_box" id="existing_icon_box">
-            {% include "wagtail_icons/icons_page/icons_results.html" with action="add" %}
-        </div>
+        {% if group %}
+            <div class="existing_icon_box" id="existing_icon_box">
+                {% include "wagtail_icons/icons_page/icons_results.html" with action="add" %}
+            </div>
+        {% endif %}
             
     </div>
 

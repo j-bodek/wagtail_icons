@@ -2,15 +2,14 @@
 {% load i18n wagtailadmin_tags %}
 {% block right_column %}
 <div style="display:flex">
-    {% if groups == "True" %}
+    {% if second_btn %}
         <div class="actionbutton" style="margin-right:15px">
-            {% url "wagtailicons:groups" as groups %}
-            <a href="{{groups}}" class="button">Groups</a>
+            <a href="{{second_btn}}" class="button">{{second_btn_text}}</a>
         </div>
     {% endif %}
     <div class="actionbutton">
-        {% with action_icon|default:'plus' as action_icon_name %}
-        <a href="{{ action_url }}{% if group %}?group={{group.id}}{% endif %}" class="button bicolor button--icon">{% icon name=action_icon_name wrapped=1 %}{{ action_text }}</a>
+        {% with action_icon as action_icon_name %}
+        <a href="{{ action_url }}{% if group %}?group={{group.id}}{% endif %}" class="button {%if action_icon%}bicolor button--icon{%endif%}">{%if action_icon%}{% icon name=action_icon_name wrapped=1 %}{%endif%}{{ action_text }}</a>
         {% endwith %}
     </div>
 </div>

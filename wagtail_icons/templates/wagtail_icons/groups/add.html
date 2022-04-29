@@ -5,31 +5,40 @@
 
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'wagtail_icons/style/groups.css' %}" type="text/css" />
+    <link rel="stylesheet" href="{% static 'wagtail_icons/style/index.css' %}" type="text/css" />
 {% endblock %}
 
 
 {% block content %}
 
-    {% url "wagtailicons:add_group" as add_group %}
-    {% include "wagtail_icons/icons_page/icons_header.html" with title="Icon Groups" groups="False" action_url=add_group action_text='Add Group' icon="tick-inverse" %}
+    {% url "wagtailicons:groups" as groups %}
+    {% include "wagtail_icons/icons_page/icons_header.html" with title="Add Icon Group" action_url=groups action_text='Groups' icon="tick-inverse" %}
 
     
     <div class="nice-padding">
 
-        <form id="fileform" action="{% url 'wagtailicons:add_group' %}" method="post">
+        <form id="group_form" action="{% url 'wagtailicons:add_group' %}" method="post">
            
             {% csrf_token %}
             {{ form.title }}
             {{ form.slug }}
-            {{ form.icons }}
-            <input class="add_button" type="submit" value="Submit" id="Save">
-        
+            <ul class="icons">
+                {% for icon in icons %}
+                <li class="icon_choice_box">
+                    <div class="icon">
+                        <div class="icon_overlay"><p>{{icon.title}}</p></div>
+                        <img class="icon_choice" src="{% get_media_prefix %}{{icon.file}}" data-id="{{icon.id}}" alt="{{icon.title}}"style="width:150px;height:150px" alt="">
+                    </div>
+                    <input class="icon_input" type="checkbox" name="icons" value="{{icon.id}}">
+                </li>
+                {% endfor %}
+            </ul>
+            <input class="add_button" type="submit" value="Create" id="Save">
         </form>
-
     </div>
 
 {% endblock %}
 
 {% block extra_js %}
-
+    <script src="{% static 'wagtail_icons/js/add_group.js' %}"></script>
 {% endblock %}

@@ -10,7 +10,8 @@
 {% block content %}
 
     {% url "wagtailicons:add_group" as add_group %}
-    {% include "wagtail_icons/icons_page/icons_header.html" with title="Icon Groups" groups="False" action_url=add_group action_text='Add Group' icon="tick-inverse" %}
+    {% url "wagtailicons:index" as icons_index %}
+    {% include "wagtail_icons/icons_page/icons_header.html" with title="Icon Groups" second_btn=icons_index second_btn_text='Icons' action_url=add_group action_text='Add Group' icon="tick-inverse" action_icon='plus' %}
 
     
     <div class="nice-padding">
@@ -21,6 +22,7 @@
                     <th></th>
                     <th>Title</th>
                     <th>Slug</th>
+                    <th>Icons Number</th>
                 </tr>
                 {% for group in groups %}
                 <tr class="group">
@@ -32,6 +34,14 @@
                     </td>
                     <td>
                         {{group.slug}}
+                    </td>
+                    <td>
+                        {{group.icons.count}}
+                    </td>
+                    <td class="last-column">
+                        <a href="{% url 'wagtailicons:add' %}?group={{group.id}}">
+                            <button class="content-button">Add Icons</button>
+                        </a>
                         <a href="{% url 'wagtailicons:index' %}?group={{group.id}}">
                             <button class="content-button">View</button>
                         </a>

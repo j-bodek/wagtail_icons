@@ -6,9 +6,15 @@
     background-color: #f6f6f6;
 }
 
+.icons{
+    max-height: 3000px;
+    overflow-y: scroll;
+}
+
 
 .groups-table{
     width:100%;
+    position:relative;
 }
 
 .groups-table-header{
@@ -43,13 +49,20 @@
 .group>td:nth-child(2){
     border-right: 1px solid #333;
 }
+.group>td:nth-child(3){
+    border-right: 1px solid #333;
+}
 
 .group>td{
     padding:10px 5px;
 }
 
+.last-column{
+    width: 1%;
+    white-space: nowrap;
+}
+
 .content-button{
-    float:right;
     background-color: #D6D6D6;
     border: 1px solid #333;
     border-radius: 5px;
@@ -57,11 +70,13 @@
     transition: all 0.1s ease;
 }
 
+
+
 .content-button:hover{
     background-color: #F5F5F5;
 }
 
-#fileform>.add_button{
+#group_form>.add_button{
     margin-top:20px;
     width:100px;
     height:40px;
@@ -72,6 +87,6 @@
     color:#fff;
 }
 
-#fileform>.add_button:hover{
+#group_form>.add_button:hover{
     background-color: #006465;
 }
