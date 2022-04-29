@@ -32,7 +32,9 @@
                     </td>
                     <td>
                         {{group.slug}}
-                        <button class="content-button">View</button>
+                        <a href="{% url 'wagtailicons:index' %}?group={{group.id}}">
+                            <button class="content-button">View</button>
+                        </a>
                     </td>
                 </tr>
                 {% endfor %}

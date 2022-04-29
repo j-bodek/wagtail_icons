@@ -11,7 +11,7 @@ from wagtail.documents.forms import get_document_form, get_document_multi_form
 from wagtail.documents.models import UploadedDocument
 # from wagtail.documents.permissions import permission_policy
 from wagtail.documents.models import UploadedDocument
-from wagtail_icons.models import Icon
+from wagtail_icons.models import Icon, Group
 from wagtail_icons.forms import IconForm
 from django.views.generic.base import TemplateView
 from django.http import HttpResponseBadRequest, HttpResponse, JsonResponse
@@ -28,10 +28,48 @@ class index(TemplateView):
         if request.POST.getlist("icons"):
             if 'type' in request.POST.dict().keys() and request.POST.get("type") == 'delete':
                 icons_ids = request.POST.getlist("icons")
-                Icon.objects.filter(id__in=icons_ids).delete()
-                return render(request, self.template_name, context=self.get_context_data())
+                group_id = request.POST.get('group','')
+                # if group_id is not specified
+                if not group_id and icons_ids:
+                    Icon.objects.filter(id__in=icons_ids).delete()
+                elif group_id and icons_ids:
+                    try:
+                        group = Group.objects.get(id=group_id)
+                        group.icons.filter(id__in=icons_ids).delete()
+                    except:
+                        group = None
+
+                context = self.get_context_data()
+                # update context if group_id
+                if group_id:
+                    if group:
+                        icons = group.icons.all()
+                    else:
+                        icons = None
+                    context.update({
+                        'icons':icons,
+                        'group':group,
+                    })                
+            
+                return render(request, self.template_name, context=context)
 
         return JsonResponse({"message":"No icons specified"})
+
+    def get(self, request, *args, **kwargs):
+        context = self.get_context_data(**kwargs)
+        if request.GET.get('group',''):
+            group_id = request.GET.get('group','')
+            try:
+                group = Group.objects.get(id=group_id)
+                icons = group.icons.all()
+            except:
+                group, icons = None, None
+            context.update({
+                'icons':icons,
+                'group':group,
+            })
+        return self.render_to_response(context)
+    
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

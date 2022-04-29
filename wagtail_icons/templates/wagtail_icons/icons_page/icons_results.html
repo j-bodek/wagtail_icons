@@ -3,6 +3,9 @@
 {% load i18n l10n %}
 {% if icons %}
 
+    {% if group %}
+        <h2 style="text-align:center">{{group.title}} Icons</h2>
+    {% endif %}
     <form id="choose_icons_form" method="POST" action="edit/">
         {% csrf_token %}
         <ul class="icons">
@@ -20,11 +23,14 @@
             {% endfor %}
         </ul>
         <input type="hidden" name="type" class="type_input">
+        <input type="hidden" name="group" class="group_input">
     </form>
 
     <div class="button_box">
-        <button class="main_button" id="edit_btn" type="submit" data-type='edit' value="{% url 'wagtailicons:edit' %}">Edit</button>
-        <button class="main_button" id="delete_btn" data-type="delete" value=""> Delete </button>
+        {% if not group %}
+            <button class="main_button" id="edit_btn" type="submit" data-type='edit' value="{% url 'wagtailicons:edit' %}">Edit</button>
+        {% endif %}
+        <button class="main_button" id="delete_btn" data-type="delete" data-group_id="{{group.id}}" value=""> Delete </button>
     </div>
 
 

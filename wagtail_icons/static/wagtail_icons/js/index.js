@@ -16,6 +16,9 @@ $(function() {
     $('.main_button').click(e=>{
         form = document.getElementById("choose_icons_form")
         $(".type_input").val(e.target.dataset.type)
+        if (e.target.dataset.group_id){
+            $(".group_input").val(e.target.dataset.group_id)
+        }
         form.action = e.target.value
         form.submit()
     })
