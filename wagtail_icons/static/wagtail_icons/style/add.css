@@ -1,4 +1,20 @@
 
+.existing_icon_box{
+    display:none;
+}
+
+.normal-button{
+    padding:5px 10px;
+    font-weight: bold;
+    border-radius:5px;
+    border:1px solid #777;
+    background-color:#ddd;
+    transition: all 0.2s ease;
+}
+
+.normal-button:hover{
+    background-color: #bbb;
+}
 
 #fileform label{
     display:none;

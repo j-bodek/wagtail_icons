@@ -10,7 +10,7 @@
     {% endif %}
     <div class="actionbutton">
         {% with action_icon|default:'plus' as action_icon_name %}
-        <a href="{{ action_url }}" class="button bicolor button--icon">{% icon name=action_icon_name wrapped=1 %}{{ action_text }}</a>
+        <a href="{{ action_url }}{% if group %}?group={{group.id}}{% endif %}" class="button bicolor button--icon">{% icon name=action_icon_name wrapped=1 %}{{ action_text }}</a>
         {% endwith %}
     </div>
 </div>

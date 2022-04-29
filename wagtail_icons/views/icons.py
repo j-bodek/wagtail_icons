@@ -13,6 +13,7 @@ from wagtail.documents.models import UploadedDocument
 from wagtail.documents.models import UploadedDocument
 from wagtail_icons.models import Icon, Group
 from wagtail_icons.forms import IconForm
+from wagtail.admin import messages
 from django.views.generic.base import TemplateView
 from django.http import HttpResponseBadRequest, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404
@@ -86,7 +87,25 @@ class index(TemplateView):
 class add(TemplateView):
     template_name = 'wagtail_icons/icons_page/add.html'
 
-    def post(self, request):
+    def post(self, request, *args, **kwargs):
+        group_id = request.POST.get('group','')
+        custom_action = request.POST.get('type')
+        # update conetxt
+        context = self.get_context_data(**kwargs)
+        if group_id:
+            try:
+                # display icons that are not in group
+                group = Group.objects.get(id=group_id)
+                icons = group.icons.all()
+                icons = Icon.objects.all().exclude(id__in=list(icons.values_list('id', flat=True)))
+            except:
+                group, icons = None, None
+            context.update({
+                'icons':icons,
+                'group':group,
+            })
+
+
         if request.POST.get('action') == 'upload':
 
             if not request.FILES:
@@ -97,6 +116,15 @@ class add(TemplateView):
             return_data = []
             icons = request.FILES.getlist('icons')
             urls = request.POST.getlist('urls')
+            # get group if group_id
+            if group_id:
+                try:
+                    group = Group.objects.get(id=group_id)
+                except:
+                    group = None
+            else:
+                group = None
+
             for file, url in zip(icons, urls):
 
                 file_title = request.POST.get('title') if request.POST.get('title') and len(icons) == 1 else file.name.rsplit(".", 1)[0]
@@ -114,6 +142,10 @@ class add(TemplateView):
                     icon.file_size = icon.file.size
                     icon.file.seek(0)
                     icon.save()
+                    # add icon to group if specified
+                    if group:
+                        group.icons.add(icon)
+                        group.save()
                     return_data.append({"icon_id":icon.id, "icon_url":url, 'icon_title':file.name, "message":"Success"})
                 else:
                     if 'file' in form.errors.get_json_data().keys() and form.errors.get_json_data()['file']:
@@ -125,7 +157,7 @@ class add(TemplateView):
 
             
 
-        elif request.POST.get('action') == 'update':
+        elif request.POST.get('action') == 'update' and not group_id:
             if Icon.objects.filter(id=request.POST.get('icon_id')):
                 update_icon = Icon.objects.filter(id=request.POST.get('icon_id'))
                 update_icon.update(title=request.POST.get('title'))
@@ -140,8 +172,44 @@ class add(TemplateView):
                 return JsonResponse({"message":"Icon Deleted"})
 
             return JsonResponse({"message":"Error"})
+        elif custom_action == 'add_existing' and group_id:
+            icons = request.POST.getlist("icons")
+            icons = Icon.objects.filter(id__in=icons)
+        
+            try:
+                group = Group.objects.get(id=group_id)
+                group.icons.add(*icons)
+                group.save()
+                # update context
+                context.update({
+                'icons':Icon.objects.all().exclude(id__in=list(icons.values_list('id', flat=True))),
+                'group':group,
+                })
+                messages.success(request, f"Successfully added {icons.count()} icon{'s' if icons.count()>1 else ''} to group : {group.title}")
+                return render(request, self.template_name, context=context)
+            except Exception as e:
+                messages.error(request, e)
+                return render(request, self.template_name, context=context)
         else:
             return JsonResponse({"message":"Invalid action"})
+
+
+    def get(self, request, *args, **kwargs):
+        context = self.get_context_data(**kwargs)
+        if request.GET.get('group',''):
+            group_id = request.GET.get('group','')
+            try:
+                # display icons that are not in group
+                group = Group.objects.get(id=group_id)
+                icons = group.icons.all()
+                icons = Icon.objects.all().exclude(id__in=list(icons.values_list('id', flat=True)))
+            except:
+                group, icons = None, None
+            context.update({
+                'icons':icons,
+                'group':group,
+            })
+        return self.render_to_response(context)
 
 
     def get_context_data(self, **kwargs):

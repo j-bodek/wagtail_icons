@@ -10,7 +10,7 @@
 {% block content %}
 
     {% url "wagtailicons:add" as add_icon %}
-    {% include "wagtail_icons/icons_page/icons_header.html" with title="Icons" groups="True" action_url=add_icon action_text='Add icon' icon="tick-inverse" %}
+    {% include "wagtail_icons/icons_page/icons_header.html" with title="Icons" groups="True" action_url=add_icon group=group action_text='Add icon' icon="tick-inverse" %}
 
     
     <div class="nice-padding">

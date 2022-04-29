@@ -1,5 +1,15 @@
 $(function() {
 
+    // switch mode logic
+    document.querySelector("#new_icon_mode").addEventListener("click", (e)=>{
+        document.querySelector("#new_icon_box").style.display = "block";
+        document.querySelector("#existing_icon_box").style.display = "none";
+    })
+    document.querySelector("#existing_icon_mode").addEventListener("click", (e)=>{
+        document.querySelector("#existing_icon_box").style.display = "block";
+        document.querySelector("#new_icon_box").style.display = "none";
+    })
+
     let update_forms_listener = function(){
         document.querySelectorAll('.updateform').forEach((form)=>{
             form.addEventListener('submit', function(e){
@@ -115,6 +125,9 @@ $(function() {
         formData.append('title', $("#titleinput").val());
         formData.append('action','upload');
         formData.append('csrfmiddlewaretoken', $("input[name=csrfmiddlewaretoken]").val());
+        if (document.querySelector(".add_button").dataset.group_id){
+            formData.append('group', document.querySelector(".add_button").dataset.group_id)
+        }
         // add file to formData
         let files = $("#fileinput").prop('files');
         for (let i = 0; i < files.length; i++) {

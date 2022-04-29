@@ -6,7 +6,7 @@
     {% if group %}
         <h2 style="text-align:center">{{group.title}} Icons</h2>
     {% endif %}
-    <form id="choose_icons_form" method="POST" action="edit/">
+    <form id="choose_icons_form" method="POST">
         {% csrf_token %}
         <ul class="icons">
             {% for icon in icons %}
@@ -30,7 +30,11 @@
         {% if not group %}
             <button class="main_button" id="edit_btn" type="submit" data-type='edit' value="{% url 'wagtailicons:edit' %}">Edit</button>
         {% endif %}
-        <button class="main_button" id="delete_btn" data-type="delete" data-group_id="{{group.id}}" value=""> Delete </button>
+        {% if not action == 'add' %}
+            <button class="main_button" id="delete_btn" data-type="delete" data-group_id="{{group.id}}" value=""> Delete </button>
+        {% else %}
+            <button class="main_button" id="edit_btn" data-type="add_existing" data-group_id="{{group.id}}" value=""> Add </button>
+        {% endif %}
     </div>
 
 

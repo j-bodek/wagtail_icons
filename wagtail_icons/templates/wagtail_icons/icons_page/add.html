@@ -6,6 +6,7 @@
 
     <link rel="stylesheet" href="{% versioned_static 'wagtailimages/css/add-multiple.css' %}" type="text/css" />
     <link rel="stylesheet" href="{% static 'wagtail_icons/style/add.css' %}" type="text/css" />
+    <link rel="stylesheet" href="{% static 'wagtail_icons/style/index.css' %}" type="text/css" />
     
 {% endblock %}
 
@@ -13,11 +14,17 @@
     {% include "wagtailadmin/shared/header.html" with title="ADD ICONS" icon="tick-inverse" %}
 
     <div class="nice-padding">
-     
-            <p>{{ help_text }}</p>
 
+        {% if group %}
+            <div style="text-align:center;margin-bottom:2rem" class="mode-box">
+                <button class="normal-button" id="new_icon_mode">Add New Icons</button>
+                <button class="normal-button" id="existing_icon_mode">Add Existing Icons</button>
+            </div>
+        {% endif %}
+
+        <div class="new_icon_box" id="new_icon_box">
             <form id="fileform" method="POST" enctype="multipart/form-data" >
-               
+                
                 {% csrf_token %}
                 {{ form.title }}
                 <div class="file_box">
@@ -27,16 +34,20 @@
                         <p id="wrong_format_info">Unsupported File Format</p>
                     </div>
                 </div>
-                <input class="add_button" type="submit" value="Submit" id="Save">
-
+                <input class="add_button" type="submit" value="Submit" data-group_id="{{group.id}}" id="Save">
+    
             </form>
-
-
-
+    
+    
+    
             
             <ul class="uploaded_icons_list" id="uploaded_icons_list" data-action_url="{% url 'wagtailicons:add' %}">
-
+    
             </ul>
+        </div>
+        <div class="existing_icon_box" id="existing_icon_box">
+            {% include "wagtail_icons/icons_page/icons_results.html" with action="add" %}
+        </div>
             
     </div>
 
@@ -47,5 +58,6 @@
 
 {% block extra_js %}
     <script src="{% static 'wagtail_icons/js/add_icon.js' %}"></script>
+    <script src="{% static 'wagtail_icons/js/index.js' %}"></script>
 
 {% endblock %}

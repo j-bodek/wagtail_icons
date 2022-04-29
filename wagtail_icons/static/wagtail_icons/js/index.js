@@ -20,6 +20,7 @@ $(function() {
             $(".group_input").val(e.target.dataset.group_id)
         }
         form.action = e.target.value
+        console.log(form.action)
         form.submit()
     })
 
@@ -34,14 +35,16 @@ $(function() {
     document.querySelectorAll('.icon').forEach(icon_choice=>{
         icon_choice.addEventListener('click', e=>{
             icon_choice.classList.toggle('icon_active')
-            let input = icon_choice.closest('.icon_choice_box').querySelector(".icon_input");
-            if (input.checked) {
-                input.checked = false;
-            }else{
-                input.checked = true;
-            }
+            if (icon_choice.closest('.icon_choice_box')){
+                let input = icon_choice.closest('.icon_choice_box').querySelector(".icon_input");
+                if (input.checked) {
+                    input.checked = false;
+                }else{
+                    input.checked = true;
+                }
 
-            display_buttons()
+                display_buttons()
+            }
         })
     })
 
