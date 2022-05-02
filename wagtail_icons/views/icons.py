@@ -36,7 +36,8 @@ class index(TemplateView):
                 elif group_id and icons_ids:
                     try:
                         group = Group.objects.get(id=group_id)
-                        group.icons.filter(id__in=icons_ids).delete()
+                        icons = Icon.objects.filter(id__in=icons_ids)
+                        group.icons.remove(*icons)
                     except:
                         group = None
 

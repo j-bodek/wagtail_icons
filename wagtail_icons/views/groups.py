@@ -11,6 +11,20 @@ from wagtail_icons.models import Group, Icon
 class index(TemplateView):
     template_name = 'wagtail_icons/groups/index.html'
 
+    def post(self, request):
+        if request.POST.get("type") == 'delete':
+            try:
+                group_ids = request.POST.getlist("groups")
+                groups = Group.objects.filter(id__in=group_ids)
+                groups_num = groups.count()
+                groups.delete()
+                messages.success(request, f"Successfully deleted {groups_num} group{'s' if groups_num > 1 else ''}!")
+                return render(request, self.template_name, context=self.get_context_data())
+            except Exception as e:
+                messages.error(request, e)
+                return render(request, self.template_name, context=self.get_context_data())
+
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 

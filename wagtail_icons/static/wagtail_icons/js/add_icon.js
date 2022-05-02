@@ -1,14 +1,16 @@
 $(function() {
 
     // switch mode logic
-    document.querySelector("#new_icon_mode").addEventListener("click", (e)=>{
-        document.querySelector("#new_icon_box").style.display = "block";
-        document.querySelector("#existing_icon_box").style.display = "none";
-    })
-    document.querySelector("#existing_icon_mode").addEventListener("click", (e)=>{
-        document.querySelector("#existing_icon_box").style.display = "block";
-        document.querySelector("#new_icon_box").style.display = "none";
-    })
+    if(document.querySelector("#new_icon_mode") && document.querySelector("#existing_icon_mode")){
+        document.querySelector("#new_icon_mode").addEventListener("click", (e)=>{
+            document.querySelector("#new_icon_box").style.display = "block";
+            document.querySelector("#existing_icon_box").style.display = "none";
+        })
+        document.querySelector("#existing_icon_mode").addEventListener("click", (e)=>{
+            document.querySelector("#existing_icon_box").style.display = "block";
+            document.querySelector("#new_icon_box").style.display = "none";
+        })
+    }
 
     let update_forms_listener = function(){
         document.querySelectorAll('.updateform').forEach((form)=>{
@@ -144,8 +146,7 @@ $(function() {
             data: formData,
             contentType: false,
             processData: false,
-            success: function (response) {       
-                console.log(response)      
+            success: function (response) {          
 
                 // reset form fields and previewIcon after sending data
                 $('#fileform')[0].reset();

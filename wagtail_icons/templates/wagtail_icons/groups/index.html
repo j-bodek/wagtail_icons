@@ -16,45 +16,58 @@
     
     <div class="nice-padding">
 
-        <div class="groups-box">
-            <table class="groups-table">
-                <tr class="groups-table-header">
-                    <th></th>
-                    <th>Title</th>
-                    <th>Slug</th>
-                    <th>Icons Number</th>
-                </tr>
-                {% for group in groups %}
-                <tr class="group">
-                    <td>
-                        <input class="group-checkbox" type="checkbox">
-                    </td>
-                    <td>
-                        {{group.title}}
-                    </td>
-                    <td>
-                        {{group.slug}}
-                    </td>
-                    <td>
-                        {{group.icons.count}}
-                    </td>
-                    <td class="last-column">
-                        <a href="{% url 'wagtailicons:add' %}?group={{group.id}}">
-                            <button class="content-button">Add Icons</button>
-                        </a>
-                        <a href="{% url 'wagtailicons:index' %}?group={{group.id}}">
-                            <button class="content-button">View</button>
-                        </a>
-                    </td>
-                </tr>
-                {% endfor %}
-            </table>
-        </div>
+        {% if groups %}
+            <div class="groups-box">
+                <table class="groups-table">
+                    <tr class="groups-table-header">
+                        <th></th>
+                        <th>Title</th>
+                        <th>Slug</th>
+                        <th>Icons Number</th>
+                    </tr>
+                    <form id="groups_form" method="POST">
+                        {% csrf_token %}
+                        {% for group in groups %}
+                        <tr class="group">
+                            <td>
+                                <input class="group-checkbox" type="checkbox" name="groups" value="{{group.id}}">
+                            </td>
+                            <td>
+                                {{group.title}}
+                            </td>
+                            <td>
+                                {{group.slug}}
+                            </td>
+                            <td>
+                                {{group.icons.count}}
+                            </td>
+                            <td class="last-column">
+                                <a href="{% url 'wagtailicons:add' %}?group={{group.id}}">
+                                    <div class="content-button">Add Icons</div>
+                                </a>
+                                <a href="{% url 'wagtailicons:index' %}?group={{group.id}}">
+                                    <div class="content-button">View</div>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        <input type="hidden" name="type" class="group_form_type">
+                    </form>
+                </table>
+            </div>
+        {% else %}
+            <p>You haven't created any groups.</p>
+        {% endif %}
+
+    <div class="delete-btn-box">
+        <button class="group_button" id="delete_btn" type="submit" data-type='delete' value="{% url 'wagtailicons:groups' %}">Delete</button>
+    </div>
+
 
     </div>
 
 {% endblock %}
 
 {% block extra_js %}
-
+<script src="{% static 'wagtail_icons/js/groups.js' %}"></script>
 {% endblock %}
