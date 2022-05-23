@@ -1,9 +1,12 @@
+header{
+    margin-bottom:0 !important;
+}
 
 .groups-box{
-    border: 1px solid #333;
     overflow: hidden;
-    border-radius: 5px;
-    background-color: #f6f6f6;
+    background-color: #fafafa;
+    width: 100%;
+    margin-top:0px;
 }
 
 .icons{
@@ -11,74 +14,137 @@
     overflow-y: scroll;
 }
 
-
 .groups-table{
     width:100%;
     position:relative;
 }
 
 .groups-table-header{
-    border-bottom: 1px solid #333;
+    border-bottom: 1px solid #e6e6e6;
 }
 
-.groups-table-header>th:nth-child(2){
-    border-right: 1px solid #333;
+.groups-table-header h4{
+    margin: .5rem 0;
 }
 
 .groups-table-header>th:not(:first-child){
     text-align: left;
-    padding-left: 5px;
 }
 
-.groups-table .group:nth-child(even){
-    background-color: #EBF2FF;
-}
-
-.groups-table .group:nth-child(odd){
-    background-color: #D6E4FF;
-}
-
+/* group rows */
 .group{
-    border-bottom: 1px solid #333;
+    background-color: #fff;
+    border-bottom: 1px solid #e6e6e6;
+    transition: all 0.1s ease;
 }
 
 .groups-table .group:last-child{
     border-bottom: none;
 }
 
-.group>td:nth-child(2){
-    border-right: 1px solid #333;
-}
-.group>td:nth-child(3){
-    border-right: 1px solid #333;
-}
-
 .group>td{
     padding:10px 5px;
 }
 
-.last-column{
-    width: 1%;
-    white-space: nowrap;
+/* column with select box */
+.group>td:first-child>input{
+    margin-left: 1rem;
+    background-color: red;
+    opacity:0;
+    transition: all 0.1s ease !important;
+}
+
+.group>td:first-child>input:checked{
+    opacity: 1;
+}
+
+.group>td:first-child{
+    padding-right:1rem;
+    width:0%;
+}
+
+/* column with title and action buttons */
+.group>td:nth-child(2){
+    padding: .8rem 0;
+}
+
+.group>td:nth-child(2)>.group-title{
+    font-size:1rem;
+    font-weight: 600;
+    color: #000;
+    margin-bottom:0.5rem;
+}
+
+.group>td:nth-child(2)>.actions{
+    opacity: 0;
+    transition: all 0.1s ease;
 }
 
 .content-button{
     display:inline-block;
-    color: #333;
+    color: #007d7e;
     -webkit-appearance: button;
     cursor: pointer;
-    background-color: #D6D6D6;
-    border: 1px solid #333;
-    border-radius: 5px;
-    padding: 2px 8px;
+    background-color: #fff;
+    border: 1px solid #d9d9d9;
+    border-radius: .2rem;
+    padding: 0 0.8em;
+    font-size: 0.95em;
+    line-height: 1.85em;
+    transition: all 0.1s ease;
+}
+
+.content-button:hover{
+    color: #fff;
+    background-color: #007d7e;
+}
+
+
+/* column with right pointed angel */
+.group>td:last-child>a{
+    width: 100%;
+    height:100%;
+    background-color: red;
+}
+
+.group>td:last-child .right-angel-box>svg{
+    fill: #007d7e;
+    height: 2.5rem;
+    margin:0;
+    transition: all 0.1s ease;
+}
+
+.group>td:last-child{
+    text-align: center;
+    padding: 0 .4rem;
+    cursor: pointer;
     transition: all 0.1s ease;
 }
 
 
+/* group table row hover effect */
 
-.content-button:hover{
-    background-color: #F5F5F5;
+.group:hover{
+    background-color: #fcfcfc;
 }
+
+.group:hover td:first-child>input{
+    opacity:1;
+}
+
+.group:hover td:nth-child(2)>.actions{
+    opacity: 1;
+}
+
+.group:hover td:last-child{
+    background:#007d7e;
+}
+.group:hover td:last-child .right-angel-box>svg{
+    fill:#fff;
+}
+
+
+
 
 #delete_btn{
     width:100px;

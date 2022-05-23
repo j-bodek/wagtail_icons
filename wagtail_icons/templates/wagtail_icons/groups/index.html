@@ -13,58 +13,67 @@
     {% url "wagtailicons:index" as icons_index %}
     {% include "wagtail_icons/icons_page/icons_header.html" with title="Icon Groups" second_btn=icons_index second_btn_text='Icons' action_url=add_group action_text='Add Group' icon="tick-inverse" action_icon='plus' %}
 
-    
-    <div class="nice-padding">
 
-        {% if groups %}
-            <div class="groups-box">
-                <table class="groups-table">
-                    <tr class="groups-table-header">
-                        <th></th>
-                        <th>Title</th>
-                        <th>Slug</th>
-                        <th>Icons Number</th>
-                    </tr>
-                    <form id="groups_form" method="POST">
-                        {% csrf_token %}
-                        {% for group in groups %}
-                        <tr class="group">
-                            <td>
-                                <input class="group-checkbox" type="checkbox" name="groups" value="{{group.id}}">
-                            </td>
-                            <td>
+    {% if groups %}
+        <div class="groups-box">
+            <table class="groups-table">
+                <tr class="groups-table-header">
+                    <th></th>
+                    <th><h4>TITLE</h4></th>
+                    <th><h4>SLUG</h4></th>
+                    <th><h4>UPDATED</h4></th>
+                    <th><h4>ICONS NUBMER</h4></th>
+                </tr>
+                <form id="groups_form" method="POST">
+                    {% csrf_token %}
+                    {% for group in groups %}
+                    <tr class="group">
+                        <td>
+                            <input class="group-checkbox" type="checkbox" name="groups" value="{{group.id}}">
+                        </td>
+                        <td>
+                            <p class="group-title">
                                 {{group.title}}
-                            </td>
-                            <td>
-                                {{group.slug}}
-                            </td>
-                            <td>
-                                {{group.icons.count}}
-                            </td>
-                            <td class="last-column">
+                            </p>
+                            <div class="actions">
                                 <a href="{% url 'wagtailicons:add' %}?group={{group.id}}">
                                     <div class="content-button">Add Icons</div>
                                 </a>
                                 <a href="{% url 'wagtailicons:index' %}?group={{group.id}}">
                                     <div class="content-button">View</div>
                                 </a>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                        <input type="hidden" name="type" class="group_form_type">
-                    </form>
-                </table>
-            </div>
-        {% else %}
-            <p>You haven't created any groups.</p>
-        {% endif %}
+                            </div>
+                        </td>
+                        <td style="width:15%; padding-right:1rem">
+                            {{group.slug}}
+                        </td>
+                        <td style="width:15%; padding-right:1rem">
+                            {{group.edited}}
+                        </td>
+                        <td style="width:10%; padding-right:1rem">
+                            {{group.icons.count}}
+                        </td>
+                        <td>
+                            <a href="{% url 'wagtailicons:index' %}?group={{group.id}}">
+                                <div class="right-angel-box">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512"><!--! Font Awesome Pro 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M64 448c-8.188 0-16.38-3.125-22.62-9.375c-12.5-12.5-12.5-32.75 0-45.25L178.8 256L41.38 118.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0l160 160c12.5 12.5 12.5 32.75 0 45.25l-160 160C80.38 444.9 72.19 448 64 448z"/></svg>
+                                </div>
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    <input type="hidden" name="type" class="group_form_type">
+                </form>
+            </table>
+        </div>
+    {% else %}
+        <p>You haven't created any groups.</p>
+    {% endif %}
 
     <div class="delete-btn-box">
         <button class="group_button" id="delete_btn" type="submit" data-type='delete' value="{% url 'wagtailicons:groups' %}">Delete</button>
     </div>
 
-
-    </div>
 
 {% endblock %}
 

@@ -14,3 +14,4 @@ class Group(models.Model):
     title = models.CharField(max_length=255, verbose_name=_('title'), unique=True, blank=False, null=False)
     slug = models.CharField(max_length=255, blank=False, null=False, unique=True)
     icons = models.ManyToManyField(Icon, blank=True)
+    edited = models.DateTimeField('edited', auto_now=True, blank=False, null=False)
