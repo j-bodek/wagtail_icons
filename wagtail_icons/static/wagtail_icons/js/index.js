@@ -1,5 +1,25 @@
 $(function() {
 
+    // after submiting search form add parameter to url
+    let search_form = document.querySelector(".search-form");
+    search_form.addEventListener("submit", form=>{
+        form.preventDefault();
+
+        url = new URL(window.location.href);
+        
+        for (let key of url.searchParams.keys()) {
+            // append new hidden input
+            if (key == 'q') continue;
+            let input = document.createElement('input');
+            input.setAttribute('name', key);
+            input.setAttribute('value', url.searchParams.get(key));
+            input.setAttribute('type', 'hidden')
+            search_form.appendChild(input);
+        }
+    
+        search_form.submit();//send with added input
+    })
+
     // display or hide action buttons
     let display_buttons = function() {
         let checked = []
@@ -10,7 +30,6 @@ $(function() {
             document.querySelector(".button_box").style.display = 'none'
         }
     }
-
 
     // submit form
     $('.main_button').click(e=>{

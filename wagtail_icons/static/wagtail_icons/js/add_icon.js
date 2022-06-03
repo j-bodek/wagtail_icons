@@ -3,12 +3,14 @@ $(function() {
     // switch mode logic
     if(document.querySelector("#new_icon_mode") && document.querySelector("#existing_icon_mode")){
         document.querySelector("#new_icon_mode").addEventListener("click", (e)=>{
-            document.querySelector("#new_icon_box").style.display = "block";
-            document.querySelector("#existing_icon_box").style.display = "none";
+            if (document.querySelector("#new_icon_box").classList.contains("active")) return;
+            document.querySelector("#new_icon_box").classList.add("active");
+            document.querySelector("#existing_icon_box").classList.remove("active");
         })
         document.querySelector("#existing_icon_mode").addEventListener("click", (e)=>{
-            document.querySelector("#existing_icon_box").style.display = "block";
-            document.querySelector("#new_icon_box").style.display = "none";
+            if (document.querySelector("#existing_icon_mode").classList.contains("active")) return;
+            document.querySelector("#existing_icon_box").classList.add("active");
+            document.querySelector("#new_icon_box").classList.remove("active");
         })
     }
 

@@ -1,6 +1,12 @@
 
-.existing_icon_box{
+.existing_icon_box,
+.new_icon_box{
     display:none;
+}
+
+.existing_icon_box.active,
+.new_icon_box.active{
+    display:block;
 }
 
 .normal-button{

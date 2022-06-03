@@ -18,6 +18,8 @@ from django.views.generic.base import TemplateView
 from django.http import HttpResponseBadRequest, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
+from wagtail.admin.forms.search import SearchForm
+from django.utils.translation import gettext as _
 # from icons.fields import IconsField
 
 
@@ -54,14 +56,24 @@ class IconsIndexView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
+
         # Filter icons by group
         group_id = self.request.GET.get('group','')
         try:
             group = Group.objects.get(id=group_id)
-            icons = group.icons.all()   
+            icons = group.icons.all().order_by('-created_at')   
         except Exception:
-            group, icons = None, Icon.objects.all()
+            group, icons = None, Icon.objects.all().order_by('-created_at')
 
+        # Search
+        query_string = None
+        if 'q' in self.request.GET:
+            self.search_form = SearchForm(self.request.GET, placeholder=_("Search icons"))
+            if self.search_form.is_valid():
+                query_string = self.search_form.cleaned_data['q']
+                icons = icons.filter(title__icontains=query_string.lower())
+        else:
+            self.search_form = SearchForm(placeholder=_("Search icons"))
 
         # Pagination
         paginator = Paginator(icons, 50)
@@ -76,6 +88,7 @@ class IconsIndexView(TemplateView):
         context.update({
             'icons':icons,
             'group':group,
+            'search_form':self.search_form,
         })
 
         return context
@@ -191,17 +204,35 @@ class IconsAddView(TemplateView):
             icons = group.icons.all()
             icons = Icon.objects.all().exclude(id__in=list(icons.values_list('id', flat=True)))
         except:
-            group, icons = None, None
+            group, icons = None, Icon.objects.all()
+
+        # Search
+        query_string = None
+        if 'q' in self.request.GET:
+            self.search_form = SearchForm(self.request.GET, placeholder=_("Search icons"))
+            if self.search_form.is_valid():
+                query_string = self.search_form.cleaned_data['q']
+                icons = icons.filter(title__icontains=query_string.lower())
+        else:
+            self.search_form = SearchForm(placeholder=_("Search icons"))
+
+        # Pagination
+        paginator = Paginator(icons, 50)
+        page_num = self.request.GET.get("p")
+        try:
+            icons = paginator.page(page_num)
+        except PageNotAnInteger:
+            icons = paginator.page(1)
+        except EmptyPage:
+            icons = paginator.page(paginator.num_pages)
+
 
         context.update({
             'icons':icons,
             'group':group,
-        })
-
-        form = IconForm()
-
-        context.update({
-            'form': form,
+            'query_string':query_string,
+            'search_form':self.search_form,
+            'form': IconForm(),
         })
 
         return context

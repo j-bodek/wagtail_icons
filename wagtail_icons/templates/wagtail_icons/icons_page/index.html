@@ -11,7 +11,7 @@
 
     {% url "wagtailicons:add" as add_icon %}
     {% url "wagtailicons:groups" as groups %}
-    {% include "wagtail_icons/icons_page/icons_header.html" with title="Icons" second_btn=groups second_btn_text='Groups' action_url=add_icon group=group action_text='Add icons' action_icon='plus' icon="tick-inverse" %}
+    {% include "wagtail_icons/icons_page/icons_header.html" with search_url="wagtailicons:index" title="Icons" second_btn=groups second_btn_text='Groups' action_url=add_icon group=group action_text='Add icons' action_icon='plus' icon="tick-inverse" %}
 
     
     <div class="nice-padding">

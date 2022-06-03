@@ -16,7 +16,7 @@
     {% url "wagtailicons:index" as view_group %}
     {% url "wagtailicons:groups" as groups %}
     {% with group.title as group_title %}
-    {% include "wagtail_icons/icons_page/icons_header.html" with title="Add "|add:group_title|add:" icons" second_btn=groups second_btn_text='Groups' action_url=view_group group=group action_text='Back' %}
+    {% include "wagtail_icons/icons_page/icons_header.html" with search_url="wagtailicons:add" title="Add "|add:group_title|add:" icons" second_btn=groups second_btn_text='Groups' action_url=view_group group=group action_text='Back' %}
     {% endwith %}
 
     <div class="nice-padding">
@@ -28,7 +28,7 @@
             </div>
         {% endif %}
 
-        <div class="new_icon_box" id="new_icon_box">
+        <div class="new_icon_box {% if not group or not query_string %}active{% endif %}" id="new_icon_box">
             <form id="fileform" method="POST" enctype="multipart/form-data" >
                 
                 {% csrf_token %}
@@ -43,16 +43,13 @@
                 <input class="add_button" type="submit" value="Submit" data-group_id="{{group.id}}" id="Save">
     
             </form>
-    
-    
-    
             
             <ul class="uploaded_icons_list" id="uploaded_icons_list" data-action_url="{% url 'wagtailicons:add' %}">
     
             </ul>
         </div>
         {% if group %}
-            <div class="existing_icon_box" id="existing_icon_box">
+            <div class="existing_icon_box {% if query_string %}active{% endif %}" id="existing_icon_box">
                 {% include "wagtail_icons/icons_page/icons_results.html" with action="add" %}
             </div>
         {% endif %}
