@@ -6,9 +6,10 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render, redirect
 from wagtail.admin import messages
 from wagtail_icons.models import Group, Icon
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 
 
-class index(TemplateView):
+class GroupIndexView(TemplateView):
     template_name = 'wagtail_icons/groups/index.html'
 
     def post(self, request):
@@ -28,13 +29,25 @@ class index(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
+        # Pagination
+        all_groups  = Group.objects.all()
+        paginator = Paginator(all_groups, 1)
+        page_num = self.request.GET.get("p")
+        try:
+            groups = paginator.page(page_num)
+        except PageNotAnInteger:
+            groups = paginator.page(1)
+        except EmptyPage:
+            groups = paginator.page(paginator.num_pages)
+
         context.update({
-            'groups': Group.objects.all(),
+                'groups':groups,
         })
 
         return context
 
-class add(TemplateView):
+
+class GroupAddView(TemplateView):
     template_name = 'wagtail_icons/groups/add.html'
 
     def post(self, request):
@@ -60,7 +73,6 @@ class add(TemplateView):
                 error = '\n'.join([f"{key} - {value[0].get('message')}" for key, value in form.errors.get_json_data().items()])
                 messages.error(request, error)
                 return render(request, self.template_name, context=self.get_context_data())
-
 
 
     def get_context_data(self, **kwargs):

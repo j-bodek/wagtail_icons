@@ -1,0 +1,36 @@
+{% load static wagtail_icons_tags %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'wagtail_icons/style/pagination.css' %}" type="text/css" />
+{% endblock %}
+
+<div class="paginator-box">     
+    {% if objects.paginator.num_pages > 1 %}
+        <ul class="pagination-list">
+            {% for page in objects.paginator.page_range %}
+                {% if objects.number|add:'-3' <= page and page <= objects.number|add:3 %}
+                    <!-- display link to last page -->
+                    {% if page == objects.number|add:3 and page < objects.paginator.num_pages %}
+                        <li class="page-item {%if objects.number == page%}active-page{%endif%}"><span>...</span></li>
+                        {% with objects.paginator.num_pages|stringformat:"i" as last_page %}
+                            {% with 'p='|add:last_page as parameter %}
+                                <li class="page-item {%if objects.number == page%}active-page{%endif%}"><a href="{{request.get_full_path|add_url_parameter:'p='|add:last_page}}">{{objects.paginator.num_pages}}</a></li>
+                            {% endwith %}
+                        {% endwith %}
+                    <!-- display link to first page -->
+                    {% elif page == objects.number|add:'-3' and page > 1 %}
+                        <li class="page-item {%if objects.number == page%}active-page{%endif%}"><a href="{{request.get_full_path|add_url_parameter:'p=1'}}">1</a></li>
+                        <li class="page-item {%if objects.number == page%}active-page{%endif%}"><span>...</span></li>
+                    {% else %}
+                        {% with page|stringformat:"i" as page_num %}
+                            {% with 'p='|add:page_num as parameter %}
+                                <li class="page-item {%if objects.number == page%}active-page{%endif%}"><a href="{{request.get_full_path|add_url_parameter:parameter}}">{{page}}</a></li>
+                            {% endwith %}
+                        {% endwith %}
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+</div>

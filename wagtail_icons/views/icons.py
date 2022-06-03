@@ -17,15 +17,15 @@ from wagtail.admin import messages
 from django.views.generic.base import TemplateView
 from django.http import HttpResponseBadRequest, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404
-import json
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 # from icons.fields import IconsField
 
 
-class index(TemplateView):
+class IconsIndexView(TemplateView):
     template_name = 'wagtail_icons/icons_page/index.html'
 
 
-    def post(self, request):
+    def post(self, request, **kwargs):
         if request.POST.getlist("icons"):
             if 'type' in request.POST.dict().keys() and request.POST.get("type") == 'delete':
                 icons_ids = request.POST.getlist("icons")
@@ -39,53 +39,49 @@ class index(TemplateView):
                         icons = Icon.objects.filter(id__in=icons_ids)
                         group.icons.remove(*icons)
                     except:
-                        group = None
-
-                context = self.get_context_data()
-                # update context if group_id
-                if group_id:
-                    if group:
-                        icons = group.icons.all()
-                    else:
-                        icons = None
-                    context.update({
-                        'icons':icons,
-                        'group':group,
-                    })                
+                        group = None       
             
-                return render(request, self.template_name, context=context)
+                return render(request, self.template_name, context=self.get_context_data(**kwargs))
 
         return JsonResponse({"message":"No icons specified"})
 
     def get(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
-        if request.GET.get('group',''):
-            group_id = request.GET.get('group','')
-            try:
-                group = Group.objects.get(id=group_id)
-                icons = group.icons.all()
-            except:
-                group, icons = None, None
-            context.update({
-                'icons':icons,
-                'group':group,
-            })
+
         return self.render_to_response(context)
-    
+
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        icons = Icon.objects.all()
+        # Filter icons by group
+        group_id = self.request.GET.get('group','')
+        try:
+            group = Group.objects.get(id=group_id)
+            icons = group.icons.all()   
+        except Exception:
+            group, icons = None, Icon.objects.all()
+
+
+        # Pagination
+        paginator = Paginator(icons, 50)
+        page_num = self.request.GET.get("p")
+        try:
+            icons = paginator.page(page_num)
+        except PageNotAnInteger:
+            icons = paginator.page(1)
+        except EmptyPage:
+            icons = paginator.page(paginator.num_pages)
 
         context.update({
-            'icons': icons,
+            'icons':icons,
+            'group':group,
         })
 
         return context
 
 
-class add(TemplateView):
+class IconsAddView(TemplateView):
     template_name = 'wagtail_icons/icons_page/add.html'
 
     def post(self, request, *args, **kwargs):
@@ -93,18 +89,6 @@ class add(TemplateView):
         custom_action = request.POST.get('type')
         # update conetxt
         context = self.get_context_data(**kwargs)
-        if group_id:
-            try:
-                # display icons that are not in group
-                group = Group.objects.get(id=group_id)
-                icons = group.icons.all()
-                icons = Icon.objects.all().exclude(id__in=list(icons.values_list('id', flat=True)))
-            except:
-                group, icons = None, None
-            context.update({
-                'icons':icons,
-                'group':group,
-            })
 
 
         if request.POST.get('action') == 'upload':
@@ -181,40 +165,38 @@ class add(TemplateView):
                 group = Group.objects.get(id=group_id)
                 group.icons.add(*icons)
                 group.save()
-                # update context
-                context.update({
-                'icons':Icon.objects.all().exclude(id__in=list(icons.values_list('id', flat=True))),
-                'group':group,
-                })
+
                 messages.success(request, f"Successfully added {icons.count()} icon{'s' if icons.count()>1 else ''} to group : {group.title}")
-                return render(request, self.template_name, context=context)
+                return render(request, self.template_name, context=self.get_context_data(**kwargs))
             except Exception as e:
                 messages.error(request, e)
-                return render(request, self.template_name, context=context)
+                return render(request, self.template_name, context=self.get_context_data(**kwargs))
         else:
             return JsonResponse({"message":"Invalid action"})
 
 
     def get(self, request, *args, **kwargs):
         context = self.get_context_data(**kwargs)
-        if request.GET.get('group',''):
-            group_id = request.GET.get('group','')
-            try:
-                # display icons that are not in group
-                group = Group.objects.get(id=group_id)
-                icons = group.icons.all()
-                icons = Icon.objects.all().exclude(id__in=list(icons.values_list('id', flat=True)))
-            except:
-                group, icons = None, None
-            context.update({
-                'icons':icons,
-                'group':group,
-            })
+
         return self.render_to_response(context)
 
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
+        group_id = self.request.GET.get('group','')
+        try:
+            # display icons that are not in group
+            group = Group.objects.get(id=group_id)
+            icons = group.icons.all()
+            icons = Icon.objects.all().exclude(id__in=list(icons.values_list('id', flat=True)))
+        except:
+            group, icons = None, None
+
+        context.update({
+            'icons':icons,
+            'group':group,
+        })
 
         form = IconForm()
 
@@ -225,7 +207,7 @@ class add(TemplateView):
         return context
 
 
-class edit(TemplateView):
+class IconsEditView(TemplateView):
     template_name = 'wagtail_icons/icons_page/edit.html'
 
     def post(self, request, *args, **kwargs):

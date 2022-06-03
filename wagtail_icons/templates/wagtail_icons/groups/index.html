@@ -66,6 +66,8 @@
                 </form>
             </table>
         </div>
+
+        {% include 'wagtail_icons/pagination.html' with objects=groups %}
     {% else %}
         <p>You haven't created any groups.</p>
     {% endif %}

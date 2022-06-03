@@ -26,6 +26,10 @@
         <input type="hidden" name="group" class="group_input">
     </form>
 
+    <!-- pagination -->
+    {% include 'wagtail_icons/pagination.html' with objects=icons %}
+
+
     <div class="button_box">
         {% if not group and not action == 'add' %}
             <button class="main_button" id="edit_btn" type="submit" data-type='edit' value="{% url 'wagtailicons:edit' %}">Edit</button>
@@ -39,7 +43,6 @@
 
 
 
-
 {% else %}
-    <p>You haven't uploaded any icons.</p>
+    <p>No icons to choose from.</p>
 {% endif %}
