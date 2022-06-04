@@ -42,7 +42,8 @@
     </div>
 
 
-
+{% elif query_string %}
+    <h2 style="text-align:center">Sorry, no icons match <b>"{{query_string}}"</b></h2>
 {% else %}
-    <p>No icons to choose from.</p>
+    <h2 style="text-align:center">No icons to choose from</h2>
 {% endif %}

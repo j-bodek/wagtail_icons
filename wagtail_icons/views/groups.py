@@ -7,6 +7,9 @@ from django.shortcuts import get_object_or_404, render, redirect
 from wagtail.admin import messages
 from wagtail_icons.models import Group, Icon
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
+from wagtail.admin.forms.search import SearchForm
+from django.utils.translation import gettext as _
+from django.db.models import Q
 
 
 class GroupIndexView(TemplateView):
@@ -29,9 +32,20 @@ class GroupIndexView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
+        groups  = Group.objects.all().order_by('-created_at')
+
+        # Search
+        query_string = None
+        if 'q' in self.request.GET:
+            self.search_form = SearchForm(self.request.GET, placeholder=_("Search groups"))
+            if self.search_form.is_valid():
+                query_string = self.search_form.cleaned_data['q']
+                groups = groups.filter(Q(title__icontains=query_string.lower()) | Q(slug__icontains=query_string.lower()))
+        else:
+            self.search_form = SearchForm(placeholder=_("Search groups"))
+
         # Pagination
-        all_groups  = Group.objects.all()
-        paginator = Paginator(all_groups, 1)
+        paginator = Paginator(groups, 15)
         page_num = self.request.GET.get("p")
         try:
             groups = paginator.page(page_num)
@@ -42,6 +56,8 @@ class GroupIndexView(TemplateView):
 
         context.update({
                 'groups':groups,
+                'search_form':self.search_form,
+                'query_string':query_string,
         })
 
         return context
@@ -54,7 +70,6 @@ class GroupAddView(TemplateView):
         if request.method == 'POST':
 
             icons = request.POST.getlist("icons")
-            return_data = {}
             form = GroupForm(request.POST)
 
             if form.is_valid():
@@ -81,7 +96,7 @@ class GroupAddView(TemplateView):
 
         context.update({
             'form': form,
-            'icons':Icon.objects.all(),
+            'icons':Icon.objects.all().order_by('-created_at'),
         })
         return context
 

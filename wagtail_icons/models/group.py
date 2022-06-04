@@ -15,3 +15,4 @@ class Group(models.Model):
     slug = models.CharField(max_length=255, blank=False, null=False, unique=True)
     icons = models.ManyToManyField(Icon, blank=True)
     edited = models.DateTimeField('edited', auto_now=True, blank=False, null=False)
+    created_at = models.DateTimeField(auto_now=True, blank=False, null=False, editable=False, db_index=True)

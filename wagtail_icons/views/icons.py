@@ -89,6 +89,7 @@ class IconsIndexView(TemplateView):
             'icons':icons,
             'group':group,
             'search_form':self.search_form,
+            'query_string':query_string,
         })
 
         return context

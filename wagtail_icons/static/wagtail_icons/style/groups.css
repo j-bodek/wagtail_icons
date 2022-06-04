@@ -10,8 +10,12 @@ header{
     margin-bottom: 1rem;
 }
 
-.icons{
-    max-height: 3000px;
+#group_form{
+    margin-top:1rem;
+}
+
+#group_form>.icons{
+    max-height: 55vh;
     overflow-y: scroll;
 }
 

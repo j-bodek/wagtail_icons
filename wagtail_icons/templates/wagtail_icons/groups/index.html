@@ -11,7 +11,7 @@
 
     {% url "wagtailicons:add_group" as add_group %}
     {% url "wagtailicons:index" as icons_index %}
-    {% include "wagtail_icons/icons_page/icons_header.html" with title="Icon Groups" second_btn=icons_index second_btn_text='Icons' action_url=add_group action_text='Add Group' icon="tick-inverse" action_icon='plus' %}
+    {% include "wagtail_icons/icons_page/icons_header.html" with search_url="wagtailicons:groups" title="Icon Groups" second_btn=icons_index second_btn_text='Icons' action_url=add_group action_text='Add Group' icon="tick-inverse" action_icon='plus' %}
 
 
     {% if groups %}
@@ -68,8 +68,10 @@
         </div>
 
         {% include 'wagtail_icons/pagination.html' with objects=groups %}
+    {% elif query_string %}
+        <h2 style="text-align:center">Sorry, no groups match <b>"{{query_string}}"</b></h2>
     {% else %}
-        <p>You haven't created any groups.</p>
+        <h2 style="text-align:center">You haven't created any groups</h2>
     {% endif %}
 
     <div class="delete-btn-box">
