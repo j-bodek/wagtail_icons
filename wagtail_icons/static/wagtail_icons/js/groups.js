@@ -29,4 +29,24 @@ $(function() {
         });
     })
 
+    // sort form
+    const sort_form = document.getElementById('group_sort_form')
+    document.querySelectorAll(".group_sort_option").forEach(option=>{
+        option.addEventListener("click", e=>{
+            let ordering_parm = option.dataset.cur_ordering;
+            if (ordering_parm.endsWith(option.dataset.ordering)){
+                value = ordering_parm.startsWith("-") ? option.dataset.ordering : '-' + option.dataset.ordering
+            }else{
+                value = option.dataset.ordering
+            }
+            // create hidden input
+            let input = document.createElement('input');
+            input.setAttribute('name', 'ordering');
+            input.setAttribute('value', value);
+            input.setAttribute('type', 'hidden');
+            sort_form.appendChild(input);
+            sort_form.submit();
+        })
+    })
+
 });

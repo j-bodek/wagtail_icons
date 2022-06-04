@@ -19,12 +19,14 @@
             <table class="groups-table">
                 <tr class="groups-table-header">
                     <th></th>
-                    <th><h4>TITLE</h4></th>
-                    <th><h4>SLUG</h4></th>
-                    <th><h4>UPDATED</h4></th>
-                    <th><h4>ICONS NUBMER</h4></th>
+                    <th><h4 class="group_sort_option {% if 'title' in ordering %}active{%endif%}" data-cur_ordering="{{ordering}}" data-ordering="title">TITLE <span class="{% if 'title' in ordering and ordering|first == '-' %}reverse{%endif%}">&#8250;</span></h4></th>
+                    <th><h4 class="group_sort_option {% if 'slug' in ordering %}active{%endif%}" data-cur_ordering="{{ordering}}" data-ordering="slug">SLUG <span class="{% if 'slug' in ordering and ordering|first == '-' %}reverse{%endif%}">&#8250;</span></h4></th>
+                    <th><h4 class="group_sort_option {% if 'edited' in ordering %}active{%endif%}" data-cur_ordering="{{ordering}}" data-ordering="edited">UPDATED <span class="{% if 'edited' in ordering and ordering|first == '-' %}reverse{%endif%}">&#8250;</span></h4></th>
+                    <th><h4 class="group_sort_option {% if 'icons_num' in ordering %}active{%endif%}" data-cur_ordering="{{ordering}}" data-ordering="icons_num">ICONS NUBMER <span class="{% if 'icons_num' in ordering and ordering|first == '-' %}reverse{%endif%}">&#8250;</span></h4></th>
+                    <!-- hidden sort form -->
+                    <form action="{% url 'wagtailicons:groups'%}" id="group_sort_form" method="GET"></form>
                 </tr>
-                <form id="groups_form" method="POST">
+                <form action="{% url 'wagtailicons:groups' %}" id="groups_form" method="POST">
                     {% csrf_token %}
                     {% for group in groups %}
                     <tr class="group">
@@ -50,7 +52,7 @@
                         <td style="width:15%; padding-right:1rem">
                             {{group.edited}}
                         </td>
-                        <td style="width:10%; padding-right:1rem">
+                        <td style="width:15%; padding-right:1rem">
                             {{group.icons.count}}
                         </td>
                         <td>

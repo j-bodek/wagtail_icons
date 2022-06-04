@@ -10,6 +10,7 @@ from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from wagtail.admin.forms.search import SearchForm
 from django.utils.translation import gettext as _
 from django.db.models import Q
+from django.db.models import Count
 
 
 class GroupIndexView(TemplateView):
@@ -31,8 +32,7 @@ class GroupIndexView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
-        groups  = Group.objects.all().order_by('-created_at')
+        groups  = Group.objects.all()
 
         # Search
         query_string = None
@@ -43,6 +43,18 @@ class GroupIndexView(TemplateView):
                 groups = groups.filter(Q(title__icontains=query_string.lower()) | Q(slug__icontains=query_string.lower()))
         else:
             self.search_form = SearchForm(placeholder=_("Search groups"))
+
+        # ordering
+        if self.request.GET.get("ordering") :
+            if not self.request.GET.get("ordering").endswith('icons_num'):
+                ordering = self.request.GET.get("ordering")
+                groups = groups.order_by(ordering)
+            else:
+                ordering = self.request.GET.get("ordering")
+                groups = groups.annotate(icons_num=Count('icons')).order_by(ordering)
+        else:
+            ordering = '-edited'
+            groups = groups.order_by(ordering)
 
         # Pagination
         paginator = Paginator(groups, 15)
@@ -58,6 +70,7 @@ class GroupIndexView(TemplateView):
                 'groups':groups,
                 'search_form':self.search_form,
                 'query_string':query_string,
+                'ordering': ordering,
         })
 
         return context

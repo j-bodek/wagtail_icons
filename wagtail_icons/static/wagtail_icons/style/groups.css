@@ -19,6 +19,31 @@ header{
     overflow-y: scroll;
 }
 
+.group_sort_option{
+    cursor:pointer;
+    width: fit-content;
+}
+
+.group_sort_option.active{
+    color: #007d7e;
+}
+
+.group_sort_option>span{
+    font-size:1.25rem;
+    transform: rotate(90deg) !important;
+    -ms-transform: rotate(90deg) !important;
+    -webkit-transform: rotate(90deg) !important;
+    display: inline-block !important;
+    vertical-align: middle;
+    margin-left: .25rem;
+}
+
+.group_sort_option>span.reverse{
+    transform: rotate(-90deg) !important;
+    -ms-transform: rotate(-90deg) !important;
+    -webkit-transform: rotate(-90deg) !important;
+}
+
 .groups-table{
     width:100%;
     position:relative;
