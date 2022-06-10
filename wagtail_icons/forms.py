@@ -2,6 +2,7 @@ from django.forms import ModelForm
 from .models import Icon, Group
 from django import forms
 import re
+from django.forms.models import ModelChoiceIteratorValue, ModelChoiceField
 
 class IconForm(ModelForm):
     class Meta:
@@ -11,6 +12,7 @@ class IconForm(ModelForm):
             'title': forms.TextInput(attrs={'placeholder':'If not specified title will be file name', 'id':'titleinput', 'max_length':255}),
             'file': forms.FileInput(attrs={'id':'fileinput', 'multiple':'multiple'}),
         }
+
 
 class GroupForm(ModelForm):
     class Meta:
@@ -26,7 +28,6 @@ class GroupForm(ModelForm):
         slug = self.cleaned_data.get("slug")
         # validate slug field
         if not re.match(r'^[a-z0-9_-]+$', slug):
-            print("hello")
             self._errors['slug'] = self.error_class([
                 'Slug field can contains only lowercase letters, numbers, underscore "_" and dashes "-"'])
 

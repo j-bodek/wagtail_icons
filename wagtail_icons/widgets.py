@@ -23,3 +23,9 @@ class IconsChooserWidget(ChoiceWidget):
     template_name = 'wagtail_icons/widgets/icons_widget.html'
     option_template_name = 'wagtail_icons/widgets/icons_option_widget.html'
 
+    def get_context(self, name, value, attrs):
+        context = super().get_context(name, value, attrs)
+        optgroups = self.optgroups(name, context['widget']['value'], attrs)
+        if not True in list(set([choice[1][0]['selected'] for choice in optgroups])): optgroups[0][1][0]['selected'] = True
+        context['widget']['optgroups'] = optgroups
+        return context
