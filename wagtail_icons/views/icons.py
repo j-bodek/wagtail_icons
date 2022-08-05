@@ -1,21 +1,12 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 
 from wagtail.admin.views.generic.multiple_upload import AddView as BaseAddView
-from wagtail.images import get_image_model
-from wagtail.images.forms import get_image_form, get_image_multi_form
-from wagtail.images.models import UploadedImage
-from wagtail.images.permissions import permission_policy
-
-from wagtail.documents import get_document_model
-from wagtail.documents.forms import get_document_form, get_document_multi_form
-from wagtail.documents.models import UploadedDocument
 # from wagtail.documents.permissions import permission_policy
-from wagtail.documents.models import UploadedDocument
 from wagtail_icons.models import Icon, Group
 from wagtail_icons.forms import IconForm
 from wagtail.admin import messages
 from django.views.generic.base import TemplateView
-from django.http import HttpResponseBadRequest, HttpResponse, JsonResponse
+from django.http import HttpResponseBadRequest, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from wagtail.admin.forms.search import SearchForm
@@ -111,7 +102,6 @@ class IconsAddView(TemplateView):
                 return HttpResponseBadRequest("Please upload a file")
             
             # get specified title or file title if specified doesn't exist
-
             return_data = []
             icons = request.FILES.getlist('icons')
             urls = request.POST.getlist('urls')
@@ -153,9 +143,6 @@ class IconsAddView(TemplateView):
 
             return JsonResponse(return_data, safe=False)
 
-
-            
-
         elif request.POST.get('action') == 'update' and not group_id:
             if Icon.objects.filter(id=request.POST.get('icon_id')):
                 update_icon = Icon.objects.filter(id=request.POST.get('icon_id'))
@@ -169,8 +156,8 @@ class IconsAddView(TemplateView):
                 delete_icon = get_object_or_404(Icon, id=request.POST.get('icon_id'))
                 delete_icon.delete()
                 return JsonResponse({"message":"Icon Deleted"})
-
             return JsonResponse({"message":"Error"})
+
         elif custom_action == 'add_existing' and group_id:
             icons = request.POST.getlist("icons")
             icons = Icon.objects.filter(id__in=icons)

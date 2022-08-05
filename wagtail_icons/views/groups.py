@@ -2,8 +2,7 @@
 from wagtail_icons.models import Icon
 from wagtail_icons.forms import GroupForm
 from django.views.generic.base import TemplateView
-from django.http import JsonResponse
-from django.shortcuts import get_object_or_404, render, redirect
+from django.shortcuts import render, redirect
 from wagtail.admin import messages
 from wagtail_icons.models import Group, Icon
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator

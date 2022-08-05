@@ -2,7 +2,6 @@ from django.forms import ModelForm
 from .models import Icon, Group
 from django import forms
 import re
-from django.forms.models import ModelChoiceIteratorValue, ModelChoiceField
 
 class IconForm(ModelForm):
     class Meta:

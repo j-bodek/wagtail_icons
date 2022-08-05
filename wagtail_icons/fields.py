@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from wagtail_icons.models.upload import Icon
-from django.forms.models import ModelChoiceIteratorValue, ModelChoiceField
+from django.forms.models import ModelChoiceField
 from wagtail_icons.models import Group
 
 
@@ -9,27 +9,18 @@ class IconsField(models.ForeignKey):
     group_model = Group
 
     def __init__(self, group=None, *args, **kwargs):
-        # print(dir(self))
-        # print(self.get_default())
         kwargs.setdefault('to', Icon)
         kwargs.setdefault('on_delete', models.SET_NULL)
         kwargs.setdefault('null', True)
         kwargs.setdefault('blank', True)
         super().__init__(*args, **kwargs)
         self.group = group
-        
-        # print(self.value_from_object())
-
-
-
+    
     def formfield(self, *, using=None, **kwargs):
         if isinstance(self.remote_field.model, str):
             raise ValueError("Cannot create form field for %r yet, because "
                              "its related model %r has not been loaded yet" %
                              (self.name, self.remote_field.model))
-        # print(self.related_model)
-        # print(self.remote_field.model)
-        # print(self.remote_field.parent_link)
         return super().formfield(**{
             'form_class': ModelChoiceField,
             'queryset': self.get_queryset(using=using),

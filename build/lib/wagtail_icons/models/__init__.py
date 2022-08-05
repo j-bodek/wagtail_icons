@@ -1,1 +1,0 @@
-from .upload import Icon, ALLOWED_EXTENSIONS
