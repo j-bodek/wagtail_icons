@@ -5,7 +5,7 @@ Wagtail Icons is package that allows you to add icons (in svg format) on your pa
 ## Install
 
 ```
-pip install -i https://test.pypi.org/simple/ wagtail-icons==0.0.4
+pip install wagtail-svg-icons
 ```
 
 Then add `wagtailextraicons` to your installed apps:
