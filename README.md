@@ -53,6 +53,7 @@ Icon tag required arguments:
 Icon tag optional arguments:
 - size - icon resize given in format "HEIGHTxWIDTH"
 - class_name - icon class name that can be used to css styling
+- color - custom icon color
 
 **Example usage**
 ```
@@ -64,4 +65,7 @@ Icon tag optional arguments:
 
 <!-- Display icon scaled to width 200 and height 200 and with class 'my-icon'-->
 {% icon self.icon size='200x200' class_name='my-icon' %}
+
+<!-- Display icon scaled to width 200 and height 200 and in color #81b29a-->
+{% icon self.icon size='200x200' class_name='my-icon'  color='#81b29a' %}
 ```
