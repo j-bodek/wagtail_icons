@@ -8,7 +8,7 @@ from django.utils.safestring import mark_safe
 register = template.Library()
 
 @register.inclusion_tag('wagtail_icons/templatetags/icon.html')
-def icon(icon, size=None, class_name=None):
+def icon(icon, size=None, class_name=None, color=None):
     with open(icon.file.path, 'r') as f:
         content = f.read()
         content = str(content)
@@ -21,6 +21,8 @@ def icon(icon, size=None, class_name=None):
             svg_parameters = resize_icon(svg_parameters, size)
         if class_name:
             svg_parameters = add_new_class(svg_parameters, class_name)
+        if color:
+            svg_parameters, svg_content = change_svg_color(svg_parameters, svg_content, color)
 
     return{
         'svg_parameters':mark_safe(svg_parameters),
@@ -40,6 +42,29 @@ def add_url_parameter(path, parameter):
             return f"{path}&{parameter}"
     except ValueError:
         return f"{path}?{parameter}"
+
+def change_svg_color(svg_parameters, svg_content, color):
+    fill_parameter_found = False
+    # modify fill parameter for path
+    if re.search(r'fill="([#0-9a-zA-Z]*)"', svg_content):
+        fill_parameter_found = True
+        svg_content = re.sub(r'fill="([#0-9a-zA-Z]*)"', f'fill="{str(color)}"', svg_content)
+    if re.search(r'fill:([#0-9a-zA-Z]*)', svg_content):
+        fill_parameter_found = True
+        svg_content = re.sub(r'fill:([#0-9a-zA-Z]*)', f'fill:{str(color)}', svg_content)
+
+    # modify fill parameter for svg element
+    if re.search(r'fill="([#0-9a-zA-Z]*)"', svg_parameters):
+        fill_parameter_found = True
+        svg_parameters = re.sub(r'fill="([#0-9a-zA-Z]*)"', f'fill="{str(color)}"', svg_parameters)
+    if re.search(r'fill:([#0-9a-zA-Z]*)', svg_parameters):
+        fill_parameter_found = True
+        svg_parameters = re.sub(r'fill:([#0-9a-zA-Z]*)', f'fill:{str(color)}', svg_parameters)
+
+    # if fill parameter is not found
+    if not fill_parameter_found:
+        svg_parameters += f' fill="{str(color)}"'
+    return svg_parameters, svg_content
 
 def resize_icon(svg_parameters, size):
     height, width = size.split('x')
