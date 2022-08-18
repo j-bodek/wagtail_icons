@@ -1,7 +1,11 @@
 from django.urls import path, reverse, include
 
 from wagtail.admin.menu import MenuItem
-from wagtail.core import hooks
+
+try:
+    from wagtail import hooks
+except ImportError:
+    from wagtail.core import hooks
 
 from wagtail_icons import admin_urls
 from wagtail_icons.views.chooser import IconsChooserViewSet

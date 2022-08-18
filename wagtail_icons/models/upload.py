@@ -1,6 +1,9 @@
 import os
 from django.db import models
-from wagtail.core.utils import string_to_ascii
+try:
+    from wagtail.utils import string_to_ascii
+except ImportError:
+    from wagtail.core.utils import string_to_ascii
 from wagtail.images.models import get_upload_to
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _

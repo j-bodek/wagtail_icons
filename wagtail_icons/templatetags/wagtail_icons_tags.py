@@ -1,5 +1,3 @@
-
-import weakref
 from django import template
 from django.template.defaulttags import register
 import re

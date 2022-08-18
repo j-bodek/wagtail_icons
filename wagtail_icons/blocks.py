@@ -1,13 +1,9 @@
-from django.utils.html import format_html
 from django.utils.functional import cached_property
 
 try:
     from wagtail.blocks import ChooserBlock
 except ImportError:
     from wagtail.core.blocks import ChooserBlock
-
-from wagtail.images.shortcuts import get_rendition_or_not_found
-
 
 class IconsChooserBlock(ChooserBlock):
 

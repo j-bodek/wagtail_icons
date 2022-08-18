@@ -1,11 +1,9 @@
-import os
 from django.db import models
-from wagtail.core.utils import string_to_ascii
-from wagtail.images.models import get_upload_to
-from django.conf import settings
+try:
+    from wagtail.utils import string_to_ascii
+except ImportError:
+    from wagtail.core.utils import string_to_ascii
 from django.utils.translation import gettext_lazy as _
-from django.dispatch import receiver
-from django.core.validators import FileExtensionValidator
 from wagtail_icons.models import Icon
 
 ALLOWED_EXTENSIONS = ['svg']
