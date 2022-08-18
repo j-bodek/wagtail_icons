@@ -6,10 +6,11 @@ from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 from django.dispatch import receiver
 from django.core.validators import FileExtensionValidator
+from wagtail.search import index
 
 ALLOWED_EXTENSIONS = ['svg']
 
-class Icon(models.Model): 
+class Icon(index.Indexed, models.Model): 
     title = models.CharField(max_length=255, verbose_name=_('title'), blank=True)
     file = models.FileField(
         verbose_name=_('file'), 

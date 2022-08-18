@@ -4,6 +4,7 @@ from wagtail.admin.menu import MenuItem
 from wagtail.core import hooks
 
 from wagtail_icons import admin_urls
+from wagtail_icons.views.chooser import IconsChooserViewSet
 
 # register url
 @hooks.register('register_admin_urls')
@@ -11,6 +12,10 @@ def register_icons_url():
     return [
         path('icons/', include(admin_urls, namespace='wagtailicons')),
     ]
+
+@hooks.register('register_admin_viewset')
+def register_person_chooser_viewset():
+    return IconsChooserViewSet('wagtail_icons', url_prefix='wagtail-icons')
 
 # register menu item
 @hooks.register('register_admin_menu_item')
