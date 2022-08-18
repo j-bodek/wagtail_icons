@@ -13,7 +13,7 @@ class AdminIconChooser(AdminChooser):
     model = Icon
     choose_modal_url_name = 'wagtailicons_modal:choose'
     clear_choice_text = _("Clear choice")
-    template = 'wagtailsvg/widgets/chooser.html'
+    template = 'wagtail_icons/widgets/icon_chooser.html'
 
     def __init__(self, group=None, **kwargs):
         super().__init__(**kwargs)
