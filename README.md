@@ -8,37 +8,63 @@ Wagtail Icons is package that allows you to add icons (in svg format) on your pa
 pip install wagtail-svg-icons
 ```
 
-Then add `wagtailextraicons` to your installed apps:
+Then add `wagtail_icons` and `generic_chooser` to your installed apps:
 
 ```
 INSTALLED_APPS = [
     ...
-    'wagtail_icons'
+    'wagtail_icons',
+	'generic_chooser',
+	...
 ]
 ```
 
 ## Usage
 
-#### IconsField and IconsChooserPanel
+#### IconsField, IconsChooserPanel and IconsChooserBlock
 **IconsField** - Subclass of [ForeignKey](https://docs.djangoproject.com/en/4.1/ref/models/fields/#foreignkey "ForeignKey") Field with many-to-one relationship with Icon model. Have all arguments of [ForeignKey](https://docs.djangoproject.com/en/4.1/ref/models/fields/#foreignkey "ForeignKey") with defaults:
 - on_delete=models.SET_NULL
 - null=True
 - blank=True
 
+**IconsChooserPanel** - Subclass of [FieldPanel](https://docs.wagtail.org/en/stable/reference/pages/panels.html#fieldpanel "FieldPanel")
+
 Extra (optional) argument:
-- group - title or slug of the group from which icons can be choosen. If not specified all available icons will be displayed.
+- group - slug of the group from which icons can be choosen. If not specified all available icons will be displayed.
+
+**IconsChooserBlock** - Subclass of [ChooserBlock](https://github.com/wagtail/wagtail/blob/main/wagtail/blocks/field_block.py#L750 "ChooserBlock")
+
+Extra (optional) argument:
+- group - slug of the group from which icons can be choosen. If not specified all available icons will be displayed.
 
 ```python
-from wagtail.core.models import Page
 from wagtail_icons.edit_handlers import IconsChooserPanel
 from wagtail_icons.fields import IconsField
+from wagtail_icons.blocks import IconsChooserBlock
 
-class iconsPage(Page):
-    template_name = 'yourapp/yourtemplate'
-    icon = IconsField(group='example_group_title')
+from wagtail.admin.edit_handlers import StreamFieldPanel
+try:
+    from wagtail.fields import StreamField
+    from wagtail.models import Page
+    from wagtail import blocks
+except ImportError:
+    # wagtail version under 3.0
+    from wagtail.core.fields import StreamField
+    from wagtail.core import blocks
+    from wagtail.core.models import Page
+
+
+class HomePage(Page):
+    icon = IconsField()
+
+    body = StreamField([
+        ('block_icon', IconsChooserBlock(group='some_group', required=False)),
+    ], blank=True)
+
 
     content_panels = Page.content_panels + [
-        IconsChooserPanel('icon'),
+        IconsChooserPanel('icon', group='another_group'),
+        StreamFieldPanel('body'),
     ]
 ```
 
