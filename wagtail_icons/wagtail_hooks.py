@@ -19,7 +19,7 @@ def register_icons_url():
 
 @hooks.register('register_admin_viewset')
 def register_person_chooser_viewset():
-    return IconsChooserViewSet('wagtail_icons', url_prefix='wagtail-icons')
+    return IconsChooserViewSet('wagtailicons_modal', url_prefix='wagtailicons-modal')
 
 # register menu item
 @hooks.register('register_admin_menu_item')
