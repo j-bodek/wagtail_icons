@@ -1,7 +1,7 @@
 
 from wagtail_icons.models import Icon
 from wagtail_icons.forms import GroupForm
-from django.views.generic.base import TemplateView
+from django.views.generic.base import TemplateView, View
 from django.shortcuts import render, redirect
 from wagtail.admin import messages
 from wagtail_icons.models import Group, Icon
@@ -14,20 +14,6 @@ from django.db.models import Count
 
 class GroupIndexView(TemplateView):
     template_name = 'wagtail_icons/groups/index.html'
-
-    def post(self, request):
-        if request.POST.get("type") == 'delete':
-            try:
-                group_ids = request.POST.getlist("groups")
-                groups = Group.objects.filter(id__in=group_ids)
-                groups_num = groups.count()
-                groups.delete()
-                messages.success(request, f"Successfully deleted {groups_num} group{'s' if groups_num > 1 else ''}!")
-                return render(request, self.template_name, context=self.get_context_data())
-            except Exception as e:
-                messages.error(request, e)
-                return render(request, self.template_name, context=self.get_context_data())
-
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -111,4 +97,18 @@ class GroupAddView(TemplateView):
             'icons':Icon.objects.all().order_by('-created_at'),
         })
         return context
+
+class GroupDeleteView(View):
+    def post(self, request):
+        try:
+            group_ids = request.POST.getlist("groups")
+            groups = Group.objects.filter(id__in=group_ids)
+            groups_num = groups.count()
+            groups.delete()
+            messages.success(request, f"Successfully deleted {groups_num} group{'s' if groups_num > 1 else ''}!")
+            return redirect("wagtailicons:groups")
+        except Exception as e:
+            messages.error(request, e)
+            return redirect("wagtailicons:groups")
+
 

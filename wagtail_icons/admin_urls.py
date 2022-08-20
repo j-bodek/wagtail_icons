@@ -11,4 +11,5 @@ urlpatterns = [
     # groups urls
     path('groups/', groups.GroupIndexView.as_view(), name='groups'),
     path('groups/add/', groups.GroupAddView.as_view(), name='add_group'),
+    path('groups/delete/', groups.GroupDeleteView.as_view(), name='delete_group')
 ]
