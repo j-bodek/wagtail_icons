@@ -17,3 +17,10 @@ class IconsChooserPanel(FieldPanel):
         return {
             self.field_name: AdminIconChooser(group=self.group),
         }
+
+    def get_form_options(self):
+        options = super().get_form_options()
+        options['widgets'] = {
+            self.field_name: AdminIconChooser(group=self.group),
+        }
+        return options
