@@ -42,13 +42,14 @@ from wagtail_icons.edit_handlers import IconsChooserPanel
 from wagtail_icons.fields import IconsField
 from wagtail_icons.blocks import IconsChooserBlock
 
-from wagtail.admin.edit_handlers import StreamFieldPanel
 try:
+    from wagtail.admin.panels import StreamFieldPanel
     from wagtail.fields import StreamField
     from wagtail.models import Page
     from wagtail import blocks
 except ImportError:
     # wagtail version under 3.0
+    from wagtail.admin.edit_handlers import StreamFieldPanel
     from wagtail.core.fields import StreamField
     from wagtail.core import blocks
     from wagtail.core.models import Page
