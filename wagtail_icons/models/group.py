@@ -1,6 +1,6 @@
 from django.db import models
 try:
-    from wagtail.utils import string_to_ascii
+    from wagtail.coreutils import string_to_ascii
 except ImportError:
     from wagtail.core.utils import string_to_ascii
 from django.utils.translation import gettext_lazy as _
