@@ -1,5 +1,8 @@
 from .widgets import AdminIconChooser
-from wagtail.admin.edit_handlers import FieldPanel
+try:
+    from wagtail.admin.panels import FieldPanel
+except ImportError:
+    from wagtail.admin.edit_handlers import FieldPanel
 
 class IconsChooserPanel(FieldPanel):
     def __init__(self, field_name, group=None, *args, **kwargs):

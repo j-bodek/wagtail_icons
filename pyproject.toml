@@ -4,6 +4,6 @@ requires = [
     "wheel",
     "wagtail>=2.15.5",
     "django",
-    "wagtail-generic-chooser',
+    "wagtail-generic-chooser",
 ]
 build-backend = "setuptools.build_meta"

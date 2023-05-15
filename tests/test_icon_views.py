@@ -1,5 +1,8 @@
 # from django.test import TestCase
-from wagtail.tests.utils import WagtailTestUtils
+try:
+    from wagtail.test.utils import WagtailTestUtils
+except ImportError:
+    from wagtail.tests.utils import WagtailTestUtils
 from django.test import TestCase
 from django.test import Client
 from django.contrib.auth.models import User
